@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group = 'ru.alfabank.epk.reactive'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    implementation 'com.github.ramalapure:xml-parser:1.0'
+    implementation 'org.apache.xmlbeans:xmlbeans:5.3.0'
+
+    implementation 'org.projectlombok:lombok:1.18.42'
+    annotationProcessor 'org.projectlombok:lombok:1.18.42'
+}
+
+test {
+    useJUnitPlatform()
+}

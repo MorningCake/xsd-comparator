@@ -1,0 +1,1638 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://api.client.datamart.mdm.alfa.ru/webservice" elementFormDefault="unqualified" targetNamespace="http://api.client.datamart.mdm.alfa.ru/webservice">
+
+    <!-- Element Definitions -->
+    <xs:element name="GetRequest" type="GetRequest"/>
+    <xs:element name="GetResponse" type="GetResponse"/>
+    <xs:element name="GetGoldRecRequest" type="GetGoldRecRequest"/>
+    <xs:element name="GetGoldRecResponse" type="GetGoldRecResponse"/>
+    <xs:element name="GetListSubRelRequest" type="GetListSubRelRequest"/>
+    <xs:element name="GetListSubRelResponse" type="GetListSubRelResponse"/>
+    <xs:element name="GetListRequest" type="GetListRequest"/>
+    <xs:element name="GetListResponse" type="GetListResponse"/>
+
+    <!-- Complex Types Definitions -->
+    <xs:complexType name="GetRequest">
+        <xs:sequence>
+            <xs:element name="inParams" type="TARLSystemTypeRequest"/>
+            <xs:element name="data"     type="TARLSubjectInfoGetData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetGoldRecRequest">
+        <xs:sequence>
+            <xs:element name="inParams" type="TARLSystemTypeRequest"/>
+            <xs:element name="data"     type="TARLSubjectInfoGetGoldRecData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetListRequest">
+        <xs:sequence>
+            <xs:element name="inParams" type="TARLSystemTypeRequest"/>
+            <xs:element name="data"     type="TARLSubjectInfoGetListData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetListSubRelRequest">
+        <xs:sequence>
+            <xs:element name="inParams" type="TARLSystemTypeRequest"/>
+            <xs:element name="data"     type="TARLSubjectInfoGetListSubRelData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetResponse">
+        <xs:sequence>
+            <xs:element name="data" type="TARLSubjectInfoOutData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetGoldRecResponse">
+        <xs:sequence>
+            <xs:element name="data" type="TARLSubjectInfoOutData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetListSubRelResponse">
+        <xs:sequence>
+            <xs:element name="data" type="TARLSubjectInfoOutData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetListResponse">
+        <xs:sequence>
+            <xs:element name="data" type="TARLSubjectInfoOutData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSystemTypeRequest">
+        <xs:sequence>
+            <xs:element name="externalSystemCode"   type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="externalUserName"     type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Get Input Parameters -->
+    <xs:complexType name="TARLSubjectInfoGetInParams">
+        <xs:sequence>
+            <xs:element name="inParams" type="TARLSystemTypeRequest"/>
+            <xs:element name="data"     type="TARLSubjectInfoGetData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetData">
+        <xs:sequence>
+            <xs:element name="subjectSets" type="TARLSubjectInfoGetInParms"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetInParms">
+        <xs:sequence>
+            <xs:element name="subjectSet" type="TARLSubjectInfoGetInParmsResultSetRow"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetInParmsResultSetRow">
+        <xs:sequence>
+            <xs:element name="common"                  type="TARLSubjectInfoGetInParmsSubjectCommon"                   minOccurs="1" maxOccurs="1"/>
+            <xs:element name="TablesCheckMarkerList"   type="TARLSubjectInfoGetInParmsSubjectTablesCheckMarkerList"    minOccurs="1" maxOccurs="1"/>
+            <xs:element name="TechnicalManager"        type="TARLSubjectInfoGetInParmsSubjectTechnicalManager"         minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetInParmsSubjectCommon">
+        <xs:sequence>
+            <xs:element name="idSubject" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetInParmsSubjectTablesCheckMarkerList">
+        <xs:sequence>
+            <xs:element name="TablesCheckMarker" type="TARLSubjectInfoGetInParmsSubjectTablesCheckMarker" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetInParmsSubjectTablesCheckMarker">
+        <xs:sequence>
+            <xs:element name="Flag"    type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Macros"  type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetInParmsSubjectTechnicalManager">
+        <xs:sequence>
+            <xs:element name="pageManager" type="TARLSubjectInfoGetInParmsSubjectPageManager" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetInParmsSubjectPageManager">
+        <xs:sequence>
+            <xs:element name="iPageNumber" type="xs:unsignedInt" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="iPageLength" type="xs:unsignedInt" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- GetGoldRec Input Parameters -->
+    <xs:complexType name="TARLSubjectInfoGetGoldRecParams">
+        <xs:sequence>
+            <xs:element name="inParams" type="TARLSystemTypeRequest"/>
+            <xs:element name="data"     type="TARLSubjectInfoGetGoldRecData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetGoldRecData">
+        <xs:sequence>
+            <xs:element name="subjects" type="TARLSubjectInfoGetGoldRecSubjects"/>
+            <xs:element name="subPins" type="TARLSubjectInfoGetGoldRecSubjectPins"/>
+            <xs:element name="TablesCheckMarkerList" type="TARLSubjectInfoGetInParmsSubjectTablesCheckMarkerList"/>
+            <xs:element name="TechnicalManager" type="TARLSubjectInfoGetInParmsSubjectTechnicalManager" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetGoldRecSubjects">
+        <xs:sequence>
+            <xs:element name="subject" type="TARLSubjectInfoGetGoldRecSubject" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetGoldRecSubject">
+        <xs:sequence>
+            <xs:element name="idSub" type="xs:decimal" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetGoldRecSubjectPins">
+        <xs:sequence>
+            <xs:element name="subPin" type="TARLSubjectInfoGetGoldRecSubjectPin" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetGoldRecSubjectPin">
+        <xs:sequence>
+            <xs:element name="pin" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="absCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- GetListSubRel Input Parameters -->
+    <xs:complexType name="TARLSubjectInfoGetListSubRelInParams">
+        <xs:sequence>
+            <xs:element name="inParams" type="TARLSystemTypeRequest"/>
+            <xs:element name="data"     type="TARLSubjectInfoGetListSubRelData"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListSubRelData">
+        <xs:sequence>
+            <xs:element name="phones"          type="TARLSubjectInfoGetListSubRelPhones"/>
+            <xs:element name="phoneTypes"      type="TARLSubjectInfoGetListSubRelPhoneTypes"/>
+            <xs:element name="systemCodes"     type="TARLSubjectInfoGetListSubRelSystemCodes"/>
+            <xs:element name="subjectRoles"    type="TARLSubjectInfoGetListSubRelSubjectRoles"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListSubRelPhones">
+        <xs:sequence>
+            <xs:element name="sPhone" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListSubRelPhoneTypes">
+        <xs:sequence>
+            <xs:element name="sPhoneType_Code" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListSubRelSystemCodes">
+        <xs:sequence>
+            <xs:element name="sABS_Code" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListSubRelSubjectRoles">
+        <xs:sequence>
+            <xs:element name="sSubjectRoleType_Code" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- GetList Input Parameters -->
+    <xs:complexType name="TARLSubjectInfoGetListData">
+        <xs:sequence>
+            <xs:element name="subjectSets" type="TARLSubjectInfoGetListInParams" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInParams">
+        <xs:sequence>
+            <xs:element name="subjectSet" type="TARLSubjectInfoGetListInParam" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInParam">
+        <xs:sequence>
+            <xs:element name="common"                      type="TARLSubjectInfoGetListInCommon"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="person"                      type="TARLSubjectInfoGetListInPerson"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="company"                     type="TARLSubjectInfoGetListInCompany"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="group"                       type="TARLSubjectInfoGetListInGroup"                                minOccurs="0" maxOccurs="1"/>
+            <xs:element name="groupCpr"                    type="TARLSubjectInfoGetListInGroupCPR"                             minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectOKVEDs"               type="TARLSubjectInfoGetListInSubjectOKVEDs"                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dealKits"                    type="TARLSubjectInfoGetListInDealKits"                             minOccurs="0" maxOccurs="1"/>
+            <xs:element name="contactKits"                 type="TARLSubjectInfoGetListInContactKits"                          minOccurs="0" maxOccurs="1"/>
+            <xs:element name="documentKits"                type="TARLSubjectInfoGetListInDocumentKits"                         minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectAlfaPersonals"        type="TARLSubjectInfoGetListInSubjectAlfaPersonal"                  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectAnalytics"            type="TARLSubjectInfoGetListInSubjectAnalitics"                     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="pins"                        type="TARLSubjectInfoGetListInPins"                                 minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectRelations"            type="TARLSubjectInfoGetListInSubjectRelations"                     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectTags"                 type="TARLSubjectInfoGetListInSubjectTags"                          minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectConsents"             type="TARLSubjectInfoGetListInSubjectConsents"                      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectEsiaIdentifications"  type="TARLSubjectInfoGetListInSubjectEsiaIdentifications"           minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectEsiaDispatches"       type="TARLSubjectInfoGetListInSubjectEsiaDispatches"                minOccurs="0" maxOccurs="1"/>
+            <xs:element name="TablesCheckMarkerList"       type="TARLSubjectInfoGetInParmsSubjectTablesCheckMarkerList"        minOccurs="1" maxOccurs="1"/>
+            <xs:element name="TechnicalManager"            type="TARLSubjectInfoGetInParmsSubjectTechnicalManager"             minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInCommon">
+        <xs:sequence>
+            <xs:element name="bIsBankrupt"         type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dBankruptDateFrom"   type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dBankruptDateTo"     type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sResidentType_Code"  type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"           type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectType_Code"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sInn"                type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sName"               type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sName_Pattern"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInPerson">
+        <xs:sequence>
+            <xs:element name="dDateOfBirthFrom"    type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dDateOfBirthTo"      type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idPerson"            type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPersonType_Code"    type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPlaceBirth"         type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSNILS"              type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iChildrenFrom"       type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iChildrenTo"         type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sGender_Code"        type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sEducation_Code"     type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sFamilyStatus_Code"  type="xs:string"      minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInCompany">
+        <xs:sequence>
+            <xs:element name="dOGRNDateFrom"                   type="xs:dateTime"                          minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOGRNDateTo"                     type="xs:dateTime"                          minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dRegChamberDateFrom"             type="xs:dateTime"                          minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dRegChamberDateTo"               type="xs:dateTime"                          minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCharterCapitalCurrency_Code"    type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCompanyType_Code"               type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectCompanyStatus_Code"      type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKATORegion_Code"               type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="mAuthorizedCapitalFrom"          type="xs:decimal"                           minOccurs="0" maxOccurs="1"/>
+            <xs:element name="mAuthorizedCapitalTo"            type="xs:decimal"                           minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKOPF_Code"                     type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sKPP"                            type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sKPP2"                           type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOGRN"                           type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKATO"                          type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKOGU"                          type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKPO"                           type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRegPlace"                       type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idTaxationSystem"                type="xs:decimal"                           minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sTaxationSystem_Code"            type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bank"                            type="TARLSubjectInfoGetListInCompanyBank"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInCompanyBank">
+        <xs:sequence>
+            <xs:element name="sBIK"                    type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCorrespondentAccount"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSWIFT_ClearingCode"     type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSWIFT_BIC"              type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInGroup">
+        <xs:sequence>
+            <xs:element name="sGroupType_Code" type="xs:string"                    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="attributes"      type="TARLSubjectInfoGetAttributes" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInGroupCPR">
+        <xs:sequence>
+            <xs:element name="sName"   type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sInn"    type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="pin"     type="TARLSubjectInfoGetListInGroupCPRPin"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInGroupCPRPin">
+        <xs:sequence>
+            <xs:element name="sABS_Code"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPin"        type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectOKVEDs">
+        <xs:sequence>
+            <xs:element name="subjectOKVED" type="TARLSubjectInfoGetListInSubjectOKVED" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectOKVED">
+        <xs:sequence>
+            <xs:element name="sOKVED_Code"     type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKVEDType_Code" type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInDealKits">
+        <xs:sequence>
+            <xs:element name="dealKit" type="TARLSubjectInfoGetListInDealKit" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInDealKit">
+        <xs:sequence>
+            <xs:element name="deal"            type="TARLSubjectInfoGetListInDeal"         minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectDeals"    type="TARLSubjectInfoGetListInSubjectDeals" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="pins"            type="TARLSubjectInfoGetListInDealPins"     minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInDeal">
+        <xs:sequence>
+            <xs:element name="sLinkedMaster"       type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dDealRegisteredFrom" type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dDealRegisteredTo"   type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iCardProcessing"     type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDealDocNumber"      type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpenFrom"           type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpenTo"             type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dCloseFrom"          type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dCloseTo"            type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sProduct_Code"       type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sBonusNum"           type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDealType_Code"      type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDealKind_Code"      type="xs:string"      minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectDeals">
+        <xs:sequence>
+            <xs:element name="subjectDeal" type="TARLSubjectInfoGetListInSubjectDeal" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectDeal">
+        <xs:sequence>
+            <xs:element name="dOpenFrom"               type="xs:dateTime"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpenTo"                 type="xs:dateTime"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dCloseFrom"              type="xs:dateTime"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dCloseTo"                type="xs:dateTime"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectDealRole_Code"   type="xs:string"    minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInDealPins">
+        <xs:sequence>
+            <xs:element name="pin" type="TARLSubjectInfoGetListInDealPin" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInDealPin">
+        <xs:sequence>
+            <xs:element name="sABS_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPin"            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bSystemSource"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bMain"           type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInContactKits">
+        <xs:sequence>
+            <xs:element name="contactKit" type="TARLSubjectInfoGetListInContactKit" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInContactKit">
+        <xs:sequence>
+            <xs:element name="contact"     type="TARLSubjectInfoGetListInContact"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="contactPins" type="TARLSubjectInfoGetListInContactPins"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInContact">
+        <xs:sequence>
+            <xs:element name="sName"               type="xs:string"                                minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idContact"           type="xs:decimal"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sContactType_Code"   type="xs:string"                                minOccurs="0" maxOccurs="1"/>
+            <xs:element name="email"               type="TARLSubjectInfoGetListInContactEmail"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="address"             type="TARLSubjectInfoGetListInContactAddress"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="phone"               type="TARLSubjectInfoGetListInContactPhone"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="web"                 type="TARLSubjectInfoGetListInContactWeb"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInContactEmail">
+        <xs:sequence>
+            <xs:element name="sEmail"          type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sEmailType_Code" type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInContactAddress">
+        <xs:sequence>
+            <xs:element name="sAddressType_Code"           type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCountry_Code"               type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRayonType_Code"             type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sInhabitedLocalityType_Code" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRegionCode_Code"            type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sAddress"                    type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCity"                       type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sInhabitedLocality"          type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPostCode"                   type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRayon"                      type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sStreet"                     type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSWIFTAddressBank"           type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInContactPhone">
+        <xs:sequence>
+            <xs:element name="sPhone"          type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPhoneType_Code" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInContactWeb">
+        <xs:sequence>
+            <xs:element name="sWeb"            type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sWebType_Code"   type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bActual"         type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInContactPins">
+        <xs:sequence>
+            <xs:element name="contactPin" type="TARLSubjectInfoGetListInContactPin" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInContactPin">
+        <xs:sequence>
+            <xs:element name="bSystemSource"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sABS_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPin"            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInDocumentKits">
+        <xs:sequence>
+            <xs:element name="documentKit" type="TARLSubjectInfoGetListInDocumentKit" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInDocumentKit">
+        <xs:sequence>
+            <xs:element name="document" type="TARLSubjectInfoGetListInDocument" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInDocument">
+        <xs:sequence>
+            <xs:element name="sDocType_Code"       type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDocument"          type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sIssuedBy"           type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sIssuedPlace"        type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sNumber"             type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSeries"             type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDocTypeRDK_Code"    type="xs:string"      minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectAlfaPersonal">
+        <xs:sequence>
+            <xs:element name="sManager_Code"           type="xs:string"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectRoleType_Code"   type="xs:string"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOffice_Code"            type="xs:string"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectOfficeType_Code" type="xs:string"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClose"                  type="xs:dateTime"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectAnalitics">
+        <xs:sequence>
+            <xs:element name="subjectAnalytic" type="TARLSubjectInfoGetListInSubjectAnalitic" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectAnalitic">
+        <xs:sequence>
+            <xs:element name="dDateOfFirstContactFrom"     type="xs:dateTime"                                      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dDateOfFirstContactTo"       type="xs:dateTime"                                      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDebtLevel_Code"             type="xs:string"                                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sFinancialCondition_Code"    type="xs:string"                                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRating_Code"                type="xs:string"                                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSegment_Code"               type="xs:string"                                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSegmentRB_Code"             type="xs:string"                                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectAnalyticStatus_Code" type="xs:string"                                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="packServCode"                type="xs:string"                                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="packServDate"                type="xs:string"                                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectCompanyAnalytic"      type="TARLSubjectInfoGetListInSubjectCompanyAnalitic"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectPersonAnalytic"       type="TARLSubjectInfoGetListInSubjectPersonAnalitic"    minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectCompanyAnalitic">
+        <xs:sequence>
+            <xs:element name="bExternalRelations"          type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bStateDepend"                type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sBusinessBlock_Code"         type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sClientActivityType_Code"    type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sClientSegment_Code"         type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sProblemCategory_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRatingCB_Code"              type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectCategory_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectCategory2_Code"      type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectPersonAnalitic">
+        <xs:sequence>
+            <xs:element name="bActivityflag"                   type="xs:string"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bNegative"                       type="xs:string"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bOnboarding"                     type="xs:string"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bSalaryProjectflag"              type="xs:string"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dActivityDateFrom"               type="xs:dateTime"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dActivityDateTo"                 type="xs:dateTime"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dCalculatedSegmentRBDateFrom"    type="xs:dateTime"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dCalculatedSegmentRBDateTo"      type="xs:dateTime"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dPackageServicesDateFrom"        type="xs:dateTime"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dPackageServicesDateTo"          type="xs:dateTime"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCalculatedSegmentRB_Code"       type="xs:string"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOutflow_Code"                   type="xs:string"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPackageServices_Code"           type="xs:string"     minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInPins">
+        <xs:sequence>
+            <xs:element name="pin" type="TARLSubjectInfoGetListInPin" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInPin">
+        <xs:sequence>
+            <xs:element name="sABS_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPin"            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bSystemSource"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectRelations">
+        <xs:sequence>
+            <xs:element name="subjectRelation" type="TARLSubjectInfoGetListInSubjectRelation" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectRelation">
+        <xs:sequence>
+            <xs:element name="sSubjectRelationPosition_Code"   type="xs:string"                      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRoleSubject1_Code"              type="xs:string"                      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRoleSubject2_Code"              type="xs:string"                      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectRelationType_Code"       type="xs:string"                      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sABS_Code"                       type="xs:string"                      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="attributes"                      type="TARLSubjectInfoGetAttributes"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectTags">
+        <xs:sequence>
+            <xs:element name="subjectTag" type="TARLSubjectInfoGetListInSubjectTag" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectTag">
+        <xs:sequence>
+            <xs:element name="sTagType_Code"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sTag_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectConsents">
+        <xs:sequence>
+            <xs:element name="subjectConsent" type="TARLSubjectInfoGetListInSubjectConsent" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectConsent">
+        <xs:sequence>
+            <xs:element name="idrlSubjectConsent"          type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDeal"                      type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sConsentType_Code"           type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sConsentChannelType_Code"    type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sConsentFormatType_Code"     type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dConsentDateStart"           type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dConsentDateExpire"          type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSampleType_Code"            type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idEsiaDispatch"              type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectEsiaIdentifications">
+        <xs:sequence>
+            <xs:element name="subjectEsiaIdentification" type="TARLSubjectInfoGetListInSubjectEsiaIdentification" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectEsiaIdentification">
+        <xs:sequence>
+            <xs:element name="idSubjectEsiaIdentification" type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bIdentificationEsia"         type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sChannel_Code"               type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpen"                       type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClose"                      type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectEsiaDispatches">
+        <xs:sequence>
+            <xs:element name="subjectEsiaDispatch" type="TARLSubjectInfoGetListInSubjectEsiaDispatch" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TARLSubjectInfoGetListInSubjectEsiaDispatch">
+        <xs:sequence>
+            <xs:element name="idEsiaDispatch"  type="xs:decimal"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bSend"           type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sStatus_Code"    type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOffice_Code"    type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sManager_Code"   type="xs:string"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dDispatch"       type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dStatus"         type="xs:dateTime"    minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Output Parameters -->
+    <xs:complexType name="TARLSubjectInfoOutData">
+        <xs:sequence>
+            <xs:element name="subjectSets" type="TARLSubjectInfoGetOutResultSetRows"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutResultSetRows">
+        <xs:sequence>
+            <xs:element name="subjectSet" type="TARLSubjectInfoGetOutResultSetRow" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutResultSetRow">
+        <xs:sequence>
+            <xs:element name="common"                          type="TARLSubjectInfoGetOutCommon"                          minOccurs="0" maxOccurs="1"/>
+            <xs:element name="person"                          type="TARLSubjectInfoGetOutPerson"                          minOccurs="0" maxOccurs="1"/>
+            <xs:element name="company"                         type="TARLSubjectInfoGetOutCompany"                         minOccurs="0" maxOccurs="1"/>
+            <xs:element name="group"                           type="TARLSubjectInfoGetOutGroup"                           minOccurs="0" maxOccurs="1"/>
+            <xs:element name="groupCPR"                        type="TARLSubjectInfoGetOutGroupCPR"                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectNames"                    type="TARLSubjectInfoGetOutSubjectNames"                    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectOKVEDs"                   type="TARLSubjectInfoGetOutSubjectOKVEDs"                   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="contactKits"                     type="TARLSubjectInfoGetOutContactKits"                     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="documentKits"                    type="TARLSubjectInfoGetOutDocumentKits"                    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dealKits"                        type="TARLSubjectInfoGetOutDealKits"                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="communicationKits"               type="TARLSubjectInfoGetOutCommunicationsKits"              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectAlfaPersonals"            type="TARLSubjectInfoGetOutSubjectAlfaPersonals"            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectAnalytics"                type="TARLSubjectInfoGetOutSubjectAnalytics"                minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectFinReports"               type="TARLSubjectInfoGetOutSubjectFinReports"               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="pins"                            type="TARLSubjectInfoGetOutPins"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectRelations"                type="TARLSubjectInfoGetOutsubjectRelations"                minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectInfoKits"                 type="TARLSubjectInfoGetOutSubjectInfoKits"                 minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectComplianceActions"        type="TARLSubjectInfoGetOutSubjectComplianceActions"        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectPropertyKits"             type="TARLSubjectInfoGetOutSubjectPropertyKits"             minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectLifeStyles"               type="TARLSubjectInfoGetOutSubjectSubjectLifeStyles"        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectStatuses"                 type="TARLSubjectInfoGetOutSubjectStatuses"                 minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectConsents"                 type="TARLSubjectInfoGetOutSubjectConsents"                 minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectRelationDateUpdateEqs"    type="TARLSubjectInfoGetOutSubjectRelationDateUpdateEqs"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectTags"                     type="TARLSubjectInfoGetOutSubjectTags"                     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectEsiaIdentifications"      type="TARLSubjectInfoGetOutSubjectEsiaIdentifications"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectEsiaDispatches"           type="TARLSubjectInfoGetOutSubjectEsiaDispatches"           minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sMsg"                            type="xs:string"                                               minOccurs="1" maxOccurs="1"/>
+            <xs:element name="sStatus"                         type="xs:string"                                               minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutCommon">
+        <xs:sequence>
+            <xs:element name="bIsBankrupt"         type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dBankruptDate"       type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idResidentType"      type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sResidentType_Code"  type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"           type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectType"       type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectType_Code"   type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sINN"                type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sName"               type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutPerson">
+        <xs:sequence>
+            <xs:element name="dDateBirth"          type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idPerson"            type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idPersonType"        type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPersonType_Code"    type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPlaceBirth"         type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSNILS"              type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iChildrens"          type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idGender"            type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sGender_Code"        type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idEducation"         type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sEducation_Code"     type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idFamilyStatus"      type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sFamilyStatus_Code"  type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutCompany">
+        <xs:sequence>
+            <xs:element name="bExternalRelations"              type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOGRNDate"                       type="xs:date"                             minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dRegChamberDate"                 type="xs:date"                             minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCharterCapitalCurrency"        type="xs:decimal"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCharterCapitalCurrency_Code"    type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCompany"                       type="xs:decimal"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCompanyType"                   type="xs:decimal"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCompanyType_Code"               type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idOKOPF"                         type="xs:decimal"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKOPF_Code"                     type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sKPP"                            type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sKPP2"                           type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sNameRegAuthority"               type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOGRN"                           type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKATO"                          type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKOGU"                          type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKPO"                           type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRegPlace"                       type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="mAuthorizedCapital"              type="xs:decimal"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idTaxationSystem"                type="xs:decimal"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sTaxationSystem_Code"            type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iEmployeesNumber"                type="xs:decimal"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dInceptionDate"                  type="xs:date"                             minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubordinationType"             type="xs:decimal"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubordinationType_Code"         type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idOKATORegion"                   type="xs:decimal"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKATORegion_Code"               type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectCompanyStatus"          type="xs:decimal"                              minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectCompanyStatus_Code"      type="xs:string"                               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bank"                            type="TARLSubjectInfoGetOutCompanyBank"     minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutCompanyBank">
+        <xs:sequence>
+            <xs:element name="sBIK"                            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCorrespondentAccount"           type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSWIFT_ClearingCode"             type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSWIFT_BIC"                      type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bAlfaBank"                       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idBank"                          type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutGroup">
+        <xs:sequence>
+            <xs:element name="idGroupType"                     type="xs:decimal"                          minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sGroupType_Code"                 type="xs:string"                           minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idGroup"                         type="xs:decimal"                          minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDescription"                    type="xs:string"                           minOccurs="0" maxOccurs="1"/>
+            <xs:element name="attributes"                      type="TARLSubjectInfoGetAttributes"     minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutGroupCPR">
+        <xs:sequence>
+            <xs:element name="sName"            type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sInn"             type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="segment"          type="xs:string"                            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="valOfAnnReven"    type="xs:decimal"                           minOccurs="0" maxOccurs="1"/>
+            <xs:element name="pins"             type="TARLSubjectInfoGetOutGroupCPRPins"    minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutGroupCPRPins">
+        <xs:sequence>
+            <xs:element name="pin"              type="TARLSubjectInfoGetOutGroupCPRPin"     minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutGroupCPRPin">
+        <xs:sequence>
+            <xs:element name="sABS_Code"        type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPin"             type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bSystemSource"    type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bMain"            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectNames">
+        <xs:sequence>
+            <xs:element name="subjectName" type="TARLSubjectInfoGetOutSubjectName" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectName">
+        <xs:sequence>
+            <xs:element name="sName"                           type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"                       type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectName"                   type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectNameType"               type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectNameType_Code"           type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bIsActual"                       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectOKVEDs">
+        <xs:sequence>
+            <xs:element name="subjectOKVED" type="TARLSubjectInfoGetOutSubjectOKVED" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectOKVED">
+        <xs:sequence>
+            <xs:element name="bMain"                           type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idOKVED"                         type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKVED_Code"                     type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idOKVEDType"                     type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOKVEDType_Code"                 type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idrlSubjectOKVED"                type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"                       type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutContactKits">
+        <xs:sequence>
+            <xs:element name="contactKit" type="TARLSubjectInfoGetOutContactKit" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutContactKit">
+        <xs:sequence>
+            <xs:element name="contact"             type="TARLSubjectInfoGetOutContact"             minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectContacts"     type="TARLSubjectInfoGetOutSubjectContacts"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="contactPins"         type="TARLSubjectInfoGetOutContactPins"         minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutContact">
+        <xs:sequence>
+            <xs:element name="sName"                       type="xs:string"                                   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idContact"                   type="xs:decimal"                                  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idContactType"               type="xs:decimal"                                  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sContactType_Code"           type="xs:string"                                   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCifEqContactType"          type="xs:decimal"                                  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCifEqContactType_Code"      type="xs:string"                                   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCifEqContactStatus"        type="xs:decimal"                                  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCifEqContactStatus_Code"    type="xs:string"                                   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCifEqAddABS"               type="xs:decimal"                                  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCifEqAddABS_Code"           type="xs:string"                                   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iCifEqABSGrade"              type="xs:decimal"                                  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bCifEqLifeCycleStatus"       type="xs:string"                                   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bIsInCifEq"                  type="xs:string"                                   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dCifEqEditDate"              type="xs:dateTime"                                 minOccurs="0" maxOccurs="1"/>
+            <xs:element name="email"                       type="TARLSubjectInfoGetOutContactEmail"        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="address"                     type="TARLSubjectInfoGetOutContactAddress"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="phone"                       type="TARLSubjectInfoGetOutContactPhone"        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="web"                         type="TARLSubjectInfoGetOutContactWeb"          minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutContactEmail">
+        <xs:sequence>
+            <xs:element name="sEmail"                      type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bActual"                     type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idEmail"                     type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idEmailType"                 type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sEmailType_Code"             type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutContactAddress">
+        <xs:sequence>
+            <xs:element name="sAddress"                    type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bGoldRecord"                 type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sFIAS"                       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sKLADR"                      type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dDateReg"                    type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idAddress"                   type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idAddressType"               type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sAddressType_Code"           type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPostCode"                   type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRayon"                      type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCity"                       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sInhabitedLocality"          type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sStreet"                     type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sHouse"                      type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sBnum"                       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sFlat"                       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSWIFTAddressBank"           type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSWIFTAddressCountry"        type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSWIFTAddressLocation"       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSWIFTAddressBranch"         type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCountry"                   type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCountry_Code"               type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idRayonType"                 type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRayonType_Code"             type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idInhabitedLocalityType"     type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sInhabitedLocalityType_Code" type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idStreetType"                type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sStreetType_Code"            type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idRegionCode"                type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRegionCode_Code"            type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bEmpty"                      type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutContactPhone">
+        <xs:sequence>
+            <xs:element name="sPhone"          type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bActual"         type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idPhone"         type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idPhoneType"     type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPhoneType_Code" type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutContactWeb">
+        <xs:sequence>
+            <xs:element name="idWeb"           type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sWeb"            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idWebType"       type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sWebType_Code"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bActual"         type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectContacts">
+        <xs:sequence>
+            <xs:element name="subjectContact" type="TARLSubjectInfoGetOutSubjectContact" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectContact">
+        <xs:sequence>
+            <xs:element name="dOpen"                       type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClose"                      type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idContact"                   type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idrlSubjectContact"          type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"                   type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDescription"                type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectContactStatus_Code"  type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutContactPins">
+        <xs:sequence>
+            <xs:element name="contactPin" type="TARLSubjectInfoGetOutContactPin"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutContactPin">
+        <xs:sequence>
+            <xs:element name="bSystemSource"   type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idABS"           type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sABS_Code"       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idrlContactABS"  type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idContact"       type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPin"            type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutDocumentKits">
+        <xs:sequence>
+            <xs:element name="documentKit" type="TARLSubjectInfoGetOutDocumentKit" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutDocumentKit">
+        <xs:sequence>
+            <xs:element name="document" type="TARLSubjectInfoGetOutDocument"                   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectDocuments" type="TARLSubjectInfoGetOutSubjectDocuments"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="documentPins" type="TARLSubjectInfoGetOutDocumentPins"           minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutDocument">
+        <xs:sequence>
+            <xs:element name="bActual"             type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bGoldRecord"         type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bMain"               type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dBegin"              type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dEnd"                type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDocType"           type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDocType_Code"       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDocument"          type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sIssuedBy"           type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sIssuedPlace"        type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sLinkedMaster"       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sName"               type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sNumber"             type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSeries"             type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDocTypeRDK_Code"    type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectDocuments">
+        <xs:sequence>
+            <xs:element name="subjectDocument" type="TARLSubjectInfoGetOutSubjectDocument" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectDocument">
+        <xs:sequence>
+            <xs:element name="dOpen"               type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDocument"          type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idrlSubjectDocument" type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"           type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDescription"        type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutDocumentPins">
+        <xs:sequence>
+            <xs:element name="documentPin" type="TARLSubjectInfoGetOutDocumentPin" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutDocumentPin">
+        <xs:sequence>
+            <xs:element name="bSystemSource"   type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idABS"           type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sABS_Code"       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idrlDocumentABS" type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDocument"      type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPin"            type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutDealKits">
+        <xs:sequence>
+            <xs:element name="dealKit" type="TARLSubjectInfoGetOutDealKit" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutDealKit">
+        <xs:sequence>
+            <xs:element name="deal"            type="TARLSubjectInfoGetOutDeal"            minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectDeals"    type="TARLSubjectInfoGetOutSubjectDeals"    minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dealPins"        type="TARLSubjectInfoGetOutDealPins"        minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutDeal">
+        <xs:sequence>
+            <xs:element name="sLinkedMaster"   type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDeal"          type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idProduct"       type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sProductCode"    type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dDealRegistered" type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sBonusNum"       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iCardProcessing" type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDealDocNumber"  type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpen"           type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClose"          type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDealType"      type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDealType_Code"  type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDealKind"      type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDealKind_Code"  type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectDeals">
+        <xs:sequence>
+            <xs:element name="subjectDeal" type="TARLSubjectInfoGetOutSubjectDeal" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectDeal">
+        <xs:sequence>
+            <xs:element name="idDeal"                  type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"               type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idrlSubjectDeal"         type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectDealRole"       type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpen"                   type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClose"                  type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDealSubjectRole_Code"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutDealPins">
+        <xs:sequence>
+            <xs:element name="dealPin" type="TARLSubjectInfoGetOutDealPin" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutDealPin">
+        <xs:sequence>
+            <xs:element name="bSystemSource"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idABS"               type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sABS_Code"           type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idrlDealABS"         type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDeal"              type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPin"                type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bMain"               type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutCommunicationsKits">
+        <xs:sequence>
+            <xs:element name="communicationKit" type="TARLSubjectInfoGetOutCommunicationsKit" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutCommunicationsKit">
+        <xs:sequence>
+            <xs:element name="communication"               type="TARLSubjectInfoGetOutCommunication"               minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectCommunications"       type="TARLSubjectInfoGetOutSubjectCommunications"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="communicationAlfaEmployees"  type="TARLSubjectInfoGetOutCommunicationAlfaEmployees"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutCommunication">
+        <xs:sequence>
+            <xs:element name="idCommunication"                 type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bIsForward"                      type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClose"                          type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dEndFactDate"                    type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpen"                           type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dPlanDate"                       type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCommunicationGoal"             type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCommunicationGoal_Code"         type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCommunicationResultType"       type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCommunicationResultType_Code"   type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCommunicationScenario"         type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCommunicationScenario_Code"     type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCommunicationStatus"           type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCommunicationStatus_Code"       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCommunicationType"             type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCommunicationType_Code"         type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idContact"                       type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSalesChannel"                  type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSalesChannel_Code"              type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCommunicationTopic"             type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDescription"                    type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPlace"                          type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sResult"                         type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectCommunications">
+        <xs:sequence>
+            <xs:element name="subjectCommunication" type="TARLSubjectInfoGetOutSubjectCommunication" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectCommunication">
+        <xs:sequence>
+            <xs:element name="idCommunication"                 type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idrlSubjectCommunication"        type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"                       type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectCommunicationType"      type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectCommunicationType_Code"  type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDescription"                    type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutCommunicationAlfaEmployees">
+        <xs:sequence>
+            <xs:element name="communicationAlfaEmployee" type="TARLSubjectInfoGetOutCommunicationAlfaEmploye" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutCommunicationAlfaEmploye">
+        <xs:sequence>
+            <xs:element name="idAlfaEmployee"              type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sAlfaEmployee_Code"          type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCommunication"             type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCommunicationAlfaEmployee" type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectAlfaPersonals">
+        <xs:sequence>
+            <xs:element name="subjectAlfaPersonal" type="TARLSubjectInfoGetOutSubjectAlfaPersonal" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectAlfaPersonal">
+        <xs:sequence>
+            <xs:element name="idSubjectAlfaPerson"     type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"               type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpen"                   type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClose"                  type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idManager"               type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sManager_Code"           type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sManager_BCode"          type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idAlfaPersonRole"        type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sAlfaPersonRole_Code"    type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idOffice"                type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOffice_Code"            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectOfficeType"     type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectOfficeType_Code" type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sManagerPosition"        type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sManagerMobilePhone"     type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sManagerAlfaPhone"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sManagerAlfaEmail"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sManagerFullName"        type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="managerIsTemp"           type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idGroupIdentity"         type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDescription"            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectAnalytics">
+        <xs:sequence>
+            <xs:element name="subjectAnalytic" type="TARLSubjectInfoGetOutSubjectAnalytic"                 minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectCompanyAnalytic" type="TARLSubjectInfoGetOutSubjectCompanyAnalytic"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectPersonAnalytic" type="TARLSubjectInfoGetOutSubjectPersonAnalytic"     minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectAnalytic">
+        <xs:sequence>
+            <xs:element name="idSubjectAnalytics"          type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"                   type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dDateOfFirstContact"         type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dFirstAccountDate"           type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idDebtLevel"                 type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDebtLevel_Code"             type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idFinancialCondition"        type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sFinancialCondition_Code"    type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idRating"                    type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRating_Code"                type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSegment"                   type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSegment_Code"               type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSegmentRB"                 type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSegmentRB_Code"             type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectAnalyticStatus"     type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectAnalyticStatus_Code" type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idPackageServices"           type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPackageServices_Code"       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dPackageServicesDate"        type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSegmentEQSKS"              type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSegmentEQSKS_Code"          type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dSegmentEQSKSDate"           type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idClientBaseStatus"          type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sClientBaseStatus_Code"      type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClientStart"                type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dDateOpenEQ"                 type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dSEBDate"                    type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idEQClientType"              type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sEQClientType_Code"          type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectCompanyAnalytic">
+        <xs:sequence>
+            <xs:element name="idSubjectAnalytics"          type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bExternalRelations"          type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bStateDepend"                type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idBusinessBlock"             type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sBusinessBlock_Code"         type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idClientActivityType"        type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sClientActivityType_Code"    type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idClientSegment"             type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sClientSegment_Code"         type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idProblemCategory"           type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sProblemCategory_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idRatingCB"                  type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sRatingCB_Code"              type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectCategory"           type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectCategory_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectCategory2"          type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectCategory2_Code"      type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="fMarketShare"                type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectCompanyAnalytics"   type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectPersonAnalytic">
+        <xs:sequence>
+            <xs:element name="idSubjectAnalytics"          type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bActivityflag"               type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bNegative"                   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bOnboarding"                 type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bSalaryProjectflag"          type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dActivityDate"               type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dCalculatedSegmentRBDate"    type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dPackageServicesDate"        type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCalculatedSegmentRB"       type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCalculatedSegmentRB_Code"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idOutflow"                   type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOutflow_Code"               type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOutflowDate"                type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idPackageServices"           type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPackageServices_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bPreOutFlow"                 type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOnboarding_Code"            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectPersonAnalytics"    type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectFinReports">
+        <xs:sequence>
+            <xs:element name="subjectFinReport" type="TARLSubjectInfoGetOutSubjectFinReport" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectFinReport">
+        <xs:sequence>
+            <xs:element name="idSubjectFinReport"      type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dCalculationDate"        type="xs:date"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dCloseReportDate"        type="xs:date"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpenReportDate"         type="xs:date"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCurrency"              type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCurrency_Code"          type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"               type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectFinIndex"       type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sSubjectFinIndex_Code"   type="xs:string"       minOccurs="0" maxOccurs="1"/>
+            <xs:element name="mFinvalue"               type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDescriptionIndex"       type="xs:string"       minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutPins">
+        <xs:sequence>
+            <xs:element name="pin" type="TARLSubjectInfoGetOutPin" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutPin">
+        <xs:sequence>
+            <xs:element name="bMain"           type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bSystemSource"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idABS"           type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sABS_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idrlSubjectABS"  type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"       type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPin"            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutsubjectRelations">
+        <xs:sequence>
+            <xs:element name="subjectRelation" type="TARLSubjectInfoGetOutSubjectRelation" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectRelation">
+        <xs:sequence>
+            <xs:element name="idSubjectRelation"               type="xs:decimal"                                          minOccurs="0" maxOccurs="1" />
+            <xs:element name="dOpen"                           type="xs:dateTime"                                         minOccurs="0" maxOccurs="1" />
+            <xs:element name="dClose"                          type="xs:dateTime"                                         minOccurs="0" maxOccurs="1" />
+            <xs:element name="idSubject1"                      type="xs:decimal"                                          minOccurs="0" maxOccurs="1" />
+            <xs:element name="idSubject2"                      type="xs:decimal"                                          minOccurs="0" maxOccurs="1" />
+            <xs:element name="idSubjectRelationPosition"       type="xs:decimal"                                          minOccurs="0" maxOccurs="1" />
+            <xs:element name="sSubjectRelationPosition_Code"   type="xs:string"                                           minOccurs="0" maxOccurs="1" />
+            <xs:element name="idRoleSubject1"                  type="xs:decimal"                                          minOccurs="0" maxOccurs="1" />
+            <xs:element name="sRoleSubject1_Code"              type="xs:string"                                           minOccurs="0" maxOccurs="1" />
+            <xs:element name="idRoleSubject2"                  type="xs:decimal"                                          minOccurs="0" maxOccurs="1" />
+            <xs:element name="sRoleSubject2_Code"              type="xs:string"                                           minOccurs="0" maxOccurs="1" />
+            <xs:element name="idSubjectRelationType"           type="xs:decimal"                                          minOccurs="0" maxOccurs="1" />
+            <xs:element name="sSubjectRelationType_Code"       type="xs:string"                                           minOccurs="0" maxOccurs="1" />
+            <xs:element name="sDescription"                    type="xs:string"                                           minOccurs="0" maxOccurs="1" />
+            <xs:element name="sSubjectRelationPosition"        type="xs:string"                            minOccurs="0" maxOccurs="1" />
+            <xs:element name="idABS"                           type="xs:decimal"                         minOccurs="0" maxOccurs="1" />
+            <xs:element name="sABS_Code"                       type="xs:string"                            minOccurs="0" maxOccurs="1" />
+            <xs:element name="idSubjectRelationStatus"         type="xs:decimal"                         minOccurs="0" maxOccurs="1" />
+            <xs:element name="sSubjectRelationStatus_Code"     type="xs:string"                            minOccurs="0" maxOccurs="1" />
+            <xs:element name="attributes"                      type="TARLSubjectInfoGetAttributes"                     minOccurs="0" maxOccurs="1" />
+            <xs:element name="subjectRelationContacts"         type="TARLSubjectInfoGetOutSubjectRelationContacts"  minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectRelationContacts">
+        <xs:sequence>
+            <xs:element name="subjectRelationContact" type="TARLSubjectInfoGetOutSubjectRelationContact" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectRelationContact">
+        <xs:sequence>
+            <xs:element name="idrlSubjectRelationContact"  type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubjectRelation"           type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idrlSubjectContact"          type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpen"                       type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClose"                      type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sDescription"                type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectInfoKits">
+        <xs:sequence>
+            <xs:element name="subjectInfoKit"  type="TARLSubjectInfoGetOutSubjectInfoKit" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectInfoKit">
+        <xs:sequence>
+            <xs:element name="info"            type="TARLSubjectInfoGetOutSubjectInfo"         minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subjectInfos"    type="TARLSubjectInfoGetOutSubjectSubjectInfos" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectInfo">
+        <xs:sequence>
+            <xs:element name="idInfo"          type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idInfoType"      type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sInfoType_Code"  type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sInfo"           type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sABS_Code"       type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sEditUserCode"   type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectSubjectInfos">
+        <xs:sequence>
+            <xs:element name="subjectInfo" type="TARLSubjectInfoGetOutSubjectSubjectInfo" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectSubjectInfo">
+        <xs:sequence>
+            <xs:element name="idrlSubjectInfo" type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"       type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idInfo"          type="xs:decimal"      minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpen"           type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClose"          type="xs:dateTime"     minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectComplianceActions">
+        <xs:sequence>
+            <xs:element name="subjectComplianceAction" type="TARLSubjectInfoGetOutSubjectComplianceAction" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectComplianceAction">
+        <xs:sequence>
+            <xs:element name="idrlSubjectComplianceAction" type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idComplianceActionObject"    type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sComplianceActionType_Code"  type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sExecutor_Code"              type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sOffice_Code"                type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpen"                       type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dClose"                      type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iStatus"                     type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sReason"                     type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iReasonCode"                 type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iRiskLevel"                  type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sExecutorFimObjectID"        type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectPropertyKits">
+        <xs:sequence>
+            <xs:element name="subjectPropertyKit" type="TARLSubjectInfoGetOutSubjectPropertyKit" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectPropertyKit">
+        <xs:sequence>
+            <xs:element name="property"            type="TARLSubjectInfoGetOutSubjectProperty"             minOccurs="0" maxOccurs="1" />
+            <xs:element name="subjectProperties"   type="TARLSubjectInfoGetOutSubjectSubjectProperties"    minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectProperty">
+        <xs:sequence>
+            <xs:element name="idProperty"          type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idPropertyType"      type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sPropertyType_Code"  type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sComment"            type="xs:string"   minOccurs="0" maxOccurs="1"/>
+            <xs:element name="iCarManufactureYear" type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idCarModel"          type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sCarModel_Code"      type="xs:string"   minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectSubjectProperties">
+        <xs:sequence>
+            <xs:element name="subjectProperty" type="TARLSubjectInfoGetOutSubjectSubjectProperty" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectSubjectProperty">
+        <xs:sequence>
+            <xs:element name="idrlSubjectProperty" type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idSubject"           type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="idProperty"          type="xs:decimal"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dOpen"               type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectSubjectLifeStyles">
+        <xs:sequence>
+            <xs:element name="lifestyle" type="TARLSubjectInfoGetOutSubjectSubjectLifeStyle" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectSubjectLifeStyle">
+        <xs:sequence>
+            <xs:element name="idrlSubjectLifeStyle"    type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="idSubject"               type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="idLifeStyleType"         type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="sLifeStyleType_Code"     type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="sComment"                type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="dOpen"                   type="xs:dateTime" minOccurs="0" maxOccurs="1" />
+            <xs:element name="dClose"                  type="xs:dateTime" minOccurs="0" maxOccurs="1" />
+            <xs:element name="dCreateDate"             type="xs:date"     minOccurs="0" maxOccurs="1" />
+            <xs:element name="sCreateUser_Code"        type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="dEditDate"               type="xs:date"     minOccurs="0" maxOccurs="1" />
+            <xs:element name="sEditUser_Code"          type="xs:string"   minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectStatuses">
+        <xs:sequence>
+            <xs:element name="subjectStatus" type="TARLSubjectInfoGetOutSubjectStatus" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectStatus">
+        <xs:sequence>
+            <xs:element name="idrlSubjectStatus"       type="xs:decimal"                                      minOccurs="0" maxOccurs="1" />
+            <xs:element name="idSubject"               type="xs:decimal"                                      minOccurs="0" maxOccurs="1" />
+            <xs:element name="idProcessStatus"         type="xs:decimal"                                      minOccurs="0" maxOccurs="1" />
+            <xs:element name="sProcessStatus_Code"     type="xs:string"                                       minOccurs="0" maxOccurs="1" />
+            <xs:element name="idProcessType"           type="xs:decimal"                                      minOccurs="0" maxOccurs="1" />
+            <xs:element name="sProcessType_Code"       type="xs:string"                                       minOccurs="0" maxOccurs="1" />
+            <xs:element name="subjectStatusKeyValues"  type="TARLSubjectInfoGetOutSubjectStatusKeyValues"  minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectStatusKeyValues">
+        <xs:sequence>
+            <xs:element name="subjectStatusKeyValue" type="TARLSubjectInfoGetOutSubjectStatusKeyValue" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectStatusKeyValue">
+        <xs:sequence>
+            <xs:element name="idkvSubjectStatus"   type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="idrlSubjectStatus"   type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="sName"               type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="sValue"              type="xs:string"   minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectConsents">
+        <xs:sequence>
+            <xs:element name="subjectConsent" type="TARLSubjectInfoGetOutSubjectConsent" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectConsent">
+        <xs:sequence>
+            <xs:element name="idrlSubjectConsent"          type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="idSubject"                   type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="idDeal"                      type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="idConsentType"               type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="sConsentType_Code"           type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="idConsentChannelType"        type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="sConsentChannelType_Code"    type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="idConsentFormatType"         type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="sConsentFormatType_Code"     type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="dConsentDateStart"           type="xs:dateTime" minOccurs="0" maxOccurs="1" />
+            <xs:element name="dConsentDateExpire"          type="xs:dateTime" minOccurs="0" maxOccurs="1" />
+            <xs:element name="sSampleType_Code"            type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="idEsiaDispatch"              type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectRelationDateUpdateEqs">
+        <xs:sequence>
+            <xs:element name="subjectRelationDateUpdateEq" type="TARLSubjectInfoGetOutSubjectRelationDateUpdateEq" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectRelationDateUpdateEq">
+        <xs:sequence>
+            <xs:element name="idrlSubjectDateUpdateEq" type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="idSubject"               type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="idDepartment"            type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="sDepartment_Code"        type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="idDateUpdateEqType"      type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="sDateUpdateEqType_Code"  type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="dDateUpdateEq"           type="xs:dateTime" minOccurs="0" maxOccurs="1" />
+            <xs:element name="iOrderNumber"            type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectTags">
+        <xs:sequence>
+            <xs:element name="subjectTag" type="TARLSubjectInfoGetOutSubjectTag" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectTag">
+        <xs:sequence>
+            <xs:element name="dOpen"                           type="xs:dateTime"     minOccurs="0" maxOccurs="1" />
+            <xs:element name="dClose"                          type="xs:dateTime"     minOccurs="0" maxOccurs="1" />
+            <xs:element name="idABS"                           type="xs:decimal"      minOccurs="0" maxOccurs="1" />
+            <xs:element name="sABS_Code"                       type="xs:string"       minOccurs="0" maxOccurs="1" />
+            <xs:element name="idCreateUserABS"                 type="xs:decimal"      minOccurs="0" maxOccurs="1" />
+            <xs:element name="sCreateUserABS_Code"             type="xs:string"       minOccurs="0" maxOccurs="1" />
+            <xs:element name="idCreateUserABSDepartment"       type="xs:decimal"      minOccurs="0" maxOccurs="1" />
+            <xs:element name="sCreateUserABSDepartment_Code"   type="xs:string"       minOccurs="0" maxOccurs="1" />
+            <xs:element name="idrlSubjectTag"                  type="xs:decimal"      minOccurs="0" maxOccurs="1" />
+            <xs:element name="idSubject"                       type="xs:decimal"      minOccurs="0" maxOccurs="1" />
+            <xs:element name="idTagType"                       type="xs:decimal"      minOccurs="0" maxOccurs="1" />
+            <xs:element name="sTagType_Code"                   type="xs:string"       minOccurs="0" maxOccurs="1" />
+            <xs:element name="idTag"                           type="xs:decimal"      minOccurs="0" maxOccurs="1" />
+            <xs:element name="sTag_Code"                       type="xs:string"       minOccurs="0" maxOccurs="1" />
+            <xs:element name="sCreateUser_Code"                type="xs:string"       minOccurs="0" maxOccurs="1" />
+            <xs:element name="sEditUser_Code"                  type="xs:string"       minOccurs="0" maxOccurs="1" />
+            <xs:element name="dEditDate"                       type="xs:dateTime"     minOccurs="0" maxOccurs="1" />
+            <xs:element name="dCreateDate"                     type="xs:dateTime"     minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectEsiaIdentifications">
+        <xs:sequence>
+            <xs:element name="subjectEsiaIdentification" type="TARLSubjectInfoGetOutSubjectEsiaIdentification" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectEsiaIdentification">
+        <xs:sequence>
+            <xs:element name="idSubjectEsiaIdentification" type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="bIdentificationEsia"         type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="sChannel_Code"               type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="dOpen"                       type="xs:dateTime" minOccurs="0" maxOccurs="1" />
+            <xs:element name="dClose"                      type="xs:dateTime" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectEsiaDispatches">
+        <xs:sequence>
+            <xs:element name="subjectEsiaDispatch" type="TARLSubjectInfoGetOutSubjectEsiaDispatch" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetOutSubjectEsiaDispatch">
+        <xs:sequence>
+            <xs:element name="idEsiaDispatch"  type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="bSend"           type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="sStatus_Code"    type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="sOffice_Code"    type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="sManager_Code"   type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="dDispatch"       type="xs:dateTime" minOccurs="0" maxOccurs="1" />
+            <xs:element name="dStatus"         type="xs:dateTime" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetAttributes">
+        <xs:sequence>
+            <xs:element name="attribute" type="TARLSubjectInfoGetAttribute" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TARLSubjectInfoGetAttribute">
+        <xs:sequence>
+            <xs:element name="idrlObjectAttribute" type="xs:decimal"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="objectAttributeType" type="xs:string"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="sValue"              type="xs:string"   minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
