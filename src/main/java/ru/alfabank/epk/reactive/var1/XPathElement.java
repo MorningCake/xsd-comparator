@@ -1,4 +1,4 @@
-package ru.alfabank.epk.reactive;
+package ru.alfabank.epk.reactive.var1;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

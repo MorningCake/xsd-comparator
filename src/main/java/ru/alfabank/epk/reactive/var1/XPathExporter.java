@@ -1,8 +1,7 @@
-package ru.alfabank.epk.reactive;
+package ru.alfabank.epk.reactive.var1;
 
 
 import lombok.Setter;
-import org.apache.logging.log4j.util.Strings;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

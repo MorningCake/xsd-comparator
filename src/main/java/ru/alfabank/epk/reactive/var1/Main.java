@@ -1,6 +1,4 @@
-package ru.alfabank.epk.reactive;
-
-import org.apache.xmlbeans.impl.common.Sax2Dom;
+package ru.alfabank.epk.reactive.var1;
 
 import java.util.Set;
 

@@ -1,6 +1,7 @@
-package ru.alfabank.epk.reactive;
+package ru.alfabank.epk.reactive.ok;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -19,17 +20,19 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
+@RequiredArgsConstructor
 public class SaxXsdReader {
 
     public static final String PATH = "src/main/resources";
 
-    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+    public void readXsd(String fileName, boolean isTreeFile, boolean isCsvFile, boolean isTreeLogs, boolean isCsvLogs)
+            throws ParserConfigurationException, SAXException, IOException {
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
         XMLReader reader = sp.getXMLReader();
-        reader.setContentHandler(new SchemaSaxHandler());
-        reader.parse(new InputSource(new FileInputStream(new File(PATH, "UWSConsumerSubjectInfoGetInOutParms28.xsd"))));
-//        reader.parse(new InputSource(new FileInputStream(new File(PATH, "client_app.xsd"))));
+        reader.setContentHandler(new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs));
+        reader.parse(new InputSource(new FileInputStream(new File(PATH, fileName))));
     }
 }
 
@@ -58,11 +61,16 @@ class SchemaComplexType {
     public void addAttribute(String name, String type) {
         attributes.put(name, type);
     }
-
 }
 
+@RequiredArgsConstructor
 @Getter @Setter
 class SchemaSaxHandler extends DefaultHandler {
+
+    private final boolean isTreeFile;
+    private final boolean isCsvFile;
+    private final boolean isTreeLogs;
+    private final boolean isCsvLogs;
 
     // temporary - always null when tag closes
     private String currentSimpleTypeName;
@@ -80,32 +88,68 @@ class SchemaSaxHandler extends DefaultHandler {
     private List<SchemaElement> rootElements = new ArrayList<>();
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+    public void endDocument() throws SAXException {
+        rootElements.forEach(rootElement -> {
+            makeTree(rootElement);
 
+            if (isTreeFile || isTreeLogs) {
+                if (isTreeLogs) printTree(rootElement, "");
+                if (isTreeFile) exportResultToFile(rootElement.getName(), "txt", treeLines);
+                System.out.println(System.lineSeparator());
+            }
+
+            if (isCsvLogs || isCsvFile) {
+                generateXPathCsv(rootElement, "", isCsvFile, isCsvLogs);
+
+                if (isCsvLogs)  System.out.println(getCsvHeader());
+
+                if (isCsvFile) {
+                    csvLines.add(getCsvHeader());
+                    exportResultToFile(rootElement.getName(), "csv", csvLines);
+                }
+            }
+        });
+    }
+
+    public void makeTree(SchemaElement element) {
+        SchemaComplexType type = complexTypes.get(element.getType());
+        if (type != null) {
+            List<SchemaElement> children = type.getChildren();
+            element.setChildren(children);
+
+            for (SchemaElement child : children) {
+                makeTree(child);
+            }
+            element.setAttributes(type.getAttributes());
+        } else {
+            if (simpleTypes.containsKey(element.getType())) {
+                element.setType(simpleTypes.get(element.getType()));
+            }
+        }
+    }
+
+    @Override
+    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         if (qName.contains("simpleType")) {
             currentSimpleTypeName = atts.getValue("name");
         }
         if (qName.contains("restriction")) {
             currentSimpleTypeBaseType = atts.getValue("base");
         }
-
         if (qName.contains("complexType")) {
             currentComplexType = new SchemaComplexType();
             currentComplexType.setName(atts.getValue("name"));
         }
-
         if (qName.contains("sequence")) {
             currentSequence = new ArrayList<>();
         }
-
         if (qName.contains("element")) {
-            String[] typeChunks = atts.getValue("type").split(":");
-            if (typeChunks.length > 1) {
-
-            }
             currentElement = new SchemaElement();
             currentElement.setName(atts.getValue("name"));
+
+            String[] typeChunks = atts.getValue("type").split(":");
             currentElement.setType(typeChunks.length == 2 ? typeChunks[1] : typeChunks[0]);
+
             currentElement.setMinOccurs(atts.getValue("minOccurs"));
             currentElement.setMaxOccurs(atts.getValue("maxOccurs"));
             if (currentSequence != null) {
@@ -139,24 +183,8 @@ class SchemaSaxHandler extends DefaultHandler {
 
     }
 
-    @Override
-    public void endDocument() throws SAXException {
-        rootElements.forEach(rootElement -> {
-            makeTree(rootElement);
-            printTree(rootElement, "");
-            System.out.println(System.lineSeparator());
-            System.out.println(getCsvHeader());
-            csvLines.add(getCsvHeader());
-            generateXPathCsv(rootElement, "");
-
-            exportResultToFile(rootElement.getName(), "csv", csvLines);
-            exportResultToFile(rootElement.getName(), "txt", treeLines);
-        });
-
-    }
-
     private void exportResultToFile(String name, String fileFormat, List<String> lines) {
-        Path resultPath = Path.of("src/main/resources/" + LocalDateTime.now() + "__" + name + "." + fileFormat).toAbsolutePath();
+        Path resultPath = Path.of("src/main/resources/generated/" + LocalDateTime.now() + "__" + name + "." + fileFormat).toAbsolutePath();
         String fileStr = lines.stream().collect(Collectors.joining(System.lineSeparator()));
         try {
             Files.writeString(resultPath, fileStr);
@@ -181,40 +209,28 @@ class SchemaSaxHandler extends DefaultHandler {
         return occurs == null ? "1" : occurs;
     }
 
-    private void generateXPathCsv(SchemaElement element, String parentPath) {
+    private void generateXPathCsv(SchemaElement element, String parentPath, boolean isCsvFile, boolean isCsvLogs) {
         String newParentPath = parentPath + "/" + element.getName();
         String csvLine = getCsvString(newParentPath, element);
-        System.out.println(csvLine);
-        csvLines.add(csvLine);
+
+        if (isCsvLogs) System.out.println(csvLine);
+        if (isCsvFile) csvLines.add(csvLine);
 
         List<SchemaElement> children = element.getChildren();
         if (children != null) {
             for (SchemaElement child : children) {
-                generateXPathCsv(child, newParentPath);
+                generateXPathCsv(child, newParentPath, isCsvFile, isCsvLogs);
             }
         }
     }
 
-    public void makeTree(SchemaElement element) {
-        SchemaComplexType type = complexTypes.get(element.getType());
-        if (type != null) {
-            List<SchemaElement> children = type.getChildren();
-            element.setChildren(children);
 
-            for (SchemaElement child : children) {
-                makeTree(child);
-            }
-            element.setAttributes(type.getAttributes());
-        } else {
-            if (simpleTypes.containsKey(element.getType())) {
-                element.setType(simpleTypes.get(element.getType()));
-            }
-        }
-    }
 
     private void printTree(SchemaElement element, String indent) {
         System.out.println(getTreeLine(element, indent));
         treeLines.add(getTreeLine(element, indent));
+
+// TODO пока не нужны
 
 //        Map<String, String> attributes = element.getAttributes();
 //        if (attributes != null) {
