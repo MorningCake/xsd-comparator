@@ -1,9 +1,8 @@
 package ru.alfabank.epk.reactive;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
 import lombok.Setter;
+import org.apache.logging.log4j.util.Strings;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,6 +29,10 @@ public class XPathExporter {
     /** Ключ - имя локального корня, например TARLSubjectInfoGetInParms для TARLSubjectInfoGetInParms/subjectSet */
     @Setter
     private Map<String, List<XPathElement>> nodeElements = new HashMap<>();
+
+    /** Имена элементов, имеющих родителем другой элемент */
+    @Setter
+    private Set<String> hasParentElements = new HashSet<>();
 
 
     public XPathExporter(String xsdName, Set<String> xsdRootsNames) {
@@ -64,29 +67,29 @@ public class XPathExporter {
         Node nameAttr = node.getAttributes().getNamedItem("name");
         Node typeAttr = node.getAttributes().getNamedItem("type");
 
-        // если есть наследники схемы xs:element у которых тип xs:complexType - то это root (учесть имя)
-        // если наследники схемы сразу xs:complexType - то они все root
         String fullPath;
         if (nameAttr != null) {
-//            boolean isRoot = node.getParentNode().toString().contains(":schema");
-
             String nodeName = nameAttr.getNodeValue();
             boolean isRoot = xsdRootsNames.contains(nodeName);
-            String nodeType = typeAttr != null ? typeAttr.getNodeValue() :
-                    (isRoot ? "" : null);
+            String nodeType = typeAttr != null ? typeAttr.getNodeValue() : (isRoot ? "" : null);
             String nodeStr = (nodeType == null || nodeType.isEmpty()) ? nodeName : nodeName + "(" + nodeType + ")";
             fullPath = parentPath.isEmpty() ? nodeStr : parentPath + "/" + nodeStr;
 
             // Выводим XPath путь, если он не пустой и есть тип
             if (!fullPath.isEmpty() && nodeType != null) {
+                boolean isSchemaChild = node.getParentNode().toString().contains(":schema");
+                String parentName = parentPath.split("/")[0];
+
                 // todo убрать после отладки
                 System.out.println(fullPath);
 
                 XPathElement xPathElement = XPathElement.builder()
                         .type(nodeType)
                         .name(nodeName)
+                        .parentName(parentName)
                         .relPath(fullPath)
                         .isAbsRoot(isRoot)
+                        .isSchemaChild(isSchemaChild)
                         .build();
 
                 // вычисление ключа из fullPath
@@ -113,6 +116,17 @@ public class XPathExporter {
         }
     }
 
+
+    private void elementsChildrenSearch() {
+        List<XPathElement> allElements = nodeElements.values().stream().flatMap(List::stream).toList();
+        // по каждому ключу укажем что элемент дочерний
+        for (XPathElement el : allElements) {
+            if (nodeElements.containsKey(el.getName())) {
+                List<XPathElement> elements = nodeElements.get(el.getName());
+            }
+        }
+    }
+
     private void xPathCorrection() {
         Optional<List<XPathElement>> rootsOptional = nodeElements.entrySet().stream()
                 .filter(entry -> entry.getKey().equals(ROOT))
@@ -120,7 +134,7 @@ public class XPathExporter {
                 .findFirst();
 
         if (rootsOptional.isEmpty())
-            throw new RuntimeException("В схеме " + xsdName + " не найдены указанные корни! Генерация остановлена!");
+            throw new RuntimeException("В схеме " + xsdName + " не найдены ROOTы! Генерация остановлена!");
 
         List<XPathElement> roots = rootsOptional.get();
         for (XPathElement root : roots) {
@@ -128,6 +142,7 @@ public class XPathExporter {
             elementsCorrection(root);
         }
     }
+
 
     private void elementsCorrection(XPathElement parent) {
         if (!nodeElements.containsKey(parent.getName())) {
