@@ -6549,20 +6549,23 @@
 	<!-- GetGoldRec начало -->
 	<xsd:complexType name="UWSConsumerSubjectInfoGetGetGoldRecInParms">
 		<xsd:sequence>
-			<xsd:element minOccurs="0" name="extSysUserSession" type="wsct:WSTypeChar255">
+<!--			<xsd:element minOccurs="0" name="extSysUserSession" type="wsct:WSTypeChar255"> -->
+			<xsd:element minOccurs="0" name="extSysUserSession" type="wsct:WSTypeChar256">
 				<xsd:annotation>
 					<xsd:documentation>Мнемоника канала фиксации отклика
 					</xsd:documentation>
 				</xsd:annotation>
 			</xsd:element>
 			
-			<xsd:element minOccurs="1" name="subjects" type="tns:UWSConsumerSubjectInfoGetGetGoldRecSubjectsRecordSet">
+<!--			<xsd:element minOccurs="1" name="subjects" type="tns:UWSConsumerSubjectInfoGetGetGoldRecSubjectsRecordSet">-->
+			<xsd:element minOccurs="0" name="subjects" type="tns:UWSConsumerSubjectInfoGetGetGoldRecSubjectsRecordSet">
 				<xsd:annotation>
 					<xsd:documentation>Список идентификаторов субъектов</xsd:documentation>
 				</xsd:annotation>
 			</xsd:element>
 			
-			<xsd:element minOccurs="1" name="subPins" type="tns:UWSConsumerSubjectInfoGetGetGoldRecSubPinsRecordSet">
+<!--			<xsd:element minOccurs="1" name="subPins" type="tns:UWSConsumerSubjectInfoGetGetGoldRecSubPinsRecordSet">-->
+			<xsd:element minOccurs="1" name="subPinSSS" type="tns:UWSConsumerSubjectInfoGetGetGoldRecSubPinsRecordSet">
 				<xsd:annotation>
 					<xsd:documentation>Список пинов</xsd:documentation>
 				</xsd:annotation>
@@ -6610,11 +6613,11 @@
 
 	<xsd:complexType name="UWSConsumerSubjectInfoGetGetGoldRecSubPinRecordSetRow">
 		<xsd:sequence>
-			<xsd:element minOccurs="0" name="pin" type="wsct:WSTypeChar255">
-				<xsd:annotation>
-					<xsd:documentation>Уникальный код субъекта в системе</xsd:documentation>
-				</xsd:annotation>
-			</xsd:element>
+<!--			<xsd:element minOccurs="0" name="pin" type="wsct:WSTypeChar255">-->
+<!--				<xsd:annotation>-->
+<!--					<xsd:documentation>Уникальный код субъекта в системе</xsd:documentation>-->
+<!--				</xsd:annotation>-->
+<!--			</xsd:element>-->
 			<xsd:element minOccurs="0" name="absCode" type="wsct:WSTypeChar255">
 				<xsd:annotation>
 					<xsd:documentation>Код Системы</xsd:documentation>
@@ -6625,7 +6628,7 @@
 		
 	
 
-	    <xsd:complexType name="UWSConsumerSubjectInfoGetGetGoldRecOutParms">
+	<xsd:complexType name="UWSConsumerSubjectInfoGetGetGoldRecOutParms">
 		<xsd:sequence>
 			<xsd:element minOccurs="0" name="subList" type="tns:UWSConsumerSubjectInfoGetGetGoldRecOutResultSet">
 				<xsd:annotation>

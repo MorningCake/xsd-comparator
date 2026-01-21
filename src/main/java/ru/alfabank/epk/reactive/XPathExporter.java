@@ -20,6 +20,7 @@ import java.util.*;
 public class XPathExporter {
 
     public static final String ROOT = "root";
+//    public static final String SCHEMA_CHILD = "schemaChild";
 
     /** Имя файла корневой xsd-схемы в ресурсах, например client_app.xsd */
     private final String xsdName;
@@ -57,43 +58,66 @@ public class XPathExporter {
         Document doc = builder.parse(xsdPath.toString());
 
         // Начало рекурсивного обхода, формирование относительных xPath
-        processNode(doc.getDocumentElement(), "");
+        processNode(doc.getDocumentElement(), "", null);
+        // Найти корни
+//        rootsSearch(); // TODO
         // Коррекция и выделение полных xPath
         xPathCorrection();
     }
 
-    private void processNode(Node node, String parentPath) {
+
+    private XPathElement processNode(Node node, String parentPath, XPathElement parentEl) {
         // Получаем имя узла из атрибута "name"
         Node nameAttr = node.getAttributes().getNamedItem("name");
         Node typeAttr = node.getAttributes().getNamedItem("type");
 
+        XPathElement xPathElement = null;
+
         String fullPath;
         if (nameAttr != null) {
             String nodeName = nameAttr.getNodeValue();
-            boolean isRoot = xsdRootsNames.contains(nodeName);
-            String nodeType = typeAttr != null ? typeAttr.getNodeValue() : (isRoot ? "" : null);
-            String nodeStr = (nodeType == null || nodeType.isEmpty()) ? nodeName : nodeName + "(" + nodeType + ")";
+            boolean isSchemaChild = node.getParentNode().toString().contains(":schema");
+            boolean isComplexType = node.getLocalName().equals("complexType");
+
+            boolean isIgnoredElement = !isComplexType && isSchemaChild;
+            if (isIgnoredElement) return null;
+
+//            boolean isRoot = xsdRootsNames.contains(nodeName);
+
+            String nodeType;
+            if (typeAttr != null) {
+                String[] typeAttrWithNamespace = typeAttr.getNodeValue().split(":");
+                nodeType = typeAttrWithNamespace[typeAttrWithNamespace.length - 1];
+            } else {
+                nodeType = (isSchemaChild ? "" : null);
+            }
+
+//            String nodeStr = (nodeType == null || nodeType.isEmpty()) ? nodeName : nodeName + "(" + nodeType + ")";
+            String nodeStr = nodeName;
             fullPath = parentPath.isEmpty() ? nodeStr : parentPath + "/" + nodeStr;
 
             // Выводим XPath путь, если он не пустой и есть тип
             if (!fullPath.isEmpty() && nodeType != null) {
-                boolean isSchemaChild = node.getParentNode().toString().contains(":schema");
+
                 String parentName = parentPath.split("/")[0];
 
                 // todo убрать после отладки
                 System.out.println(fullPath);
 
-                XPathElement xPathElement = XPathElement.builder()
+                xPathElement = XPathElement.builder()
                         .type(nodeType)
                         .name(nodeName)
                         .parentName(parentName)
                         .relPath(fullPath)
-                        .isAbsRoot(isRoot)
                         .isSchemaChild(isSchemaChild)
                         .build();
 
+                if (parentEl != null) {
+                    parentEl.addChild(xPathElement);
+                }
+
                 // вычисление ключа из fullPath
-                String key = isRoot ? ROOT : fullPath.split("/")[0];
+                String key = fullPath.split("/")[0];
 
                 if (nodeElements.containsKey(key)) {
                     nodeElements.get(key).add(xPathElement);
@@ -111,23 +135,44 @@ public class XPathExporter {
         for (int i = 0; i < children.getLength(); i++) {
             Node child = children.item(i);
             if (child.getNodeType() == Node.ELEMENT_NODE) {
-                processNode(child, fullPath);
+                processNode(child, fullPath, xPathElement);
             }
         }
+        return xPathElement;
     }
 
 
-    private void elementsChildrenSearch() {
-        List<XPathElement> allElements = nodeElements.values().stream().flatMap(List::stream).toList();
-        // по каждому ключу укажем что элемент дочерний
-        for (XPathElement el : allElements) {
-            if (nodeElements.containsKey(el.getName())) {
-                List<XPathElement> elements = nodeElements.get(el.getName());
-            }
-        }
-    }
+//    private void rootsSearch() {
+//        List<XPathElement> allElements = nodeElements.values().stream().flatMap(List::stream).toList();
+//
+//        List<XPathElement> schemaChildElements = nodeElements.values().stream()
+//                .flatMap(List::stream)
+//                .filter(XPathElement::isSchemaChild)
+//                .toList();
+//
+//        // по каждому ключу укажем что элемент дочерний
+//        for (XPathElement el : allElements) {
+//            if (nodeElements.containsKey(el.getName())) {
+//                List<XPathElement> elements = nodeElements.get(el.getName());
+//            }
+//        }
+//    }
 
     private void xPathCorrection() {
+
+        for (Map.Entry<String, List<XPathElement>> entry : nodeElements.entrySet()) {
+
+            for (XPathElement el : entry.getValue()) {
+                if (el.getName().equals(entry.getKey())) continue;
+
+                if (nodeElements.containsKey(el.getName())) {
+                    List<XPathElement> children = nodeElements.get(el.getName());
+                    System.out.println("Element " + el.getName() + " has children, size " + children.size());
+                }
+            }
+        }
+
+
         Optional<List<XPathElement>> rootsOptional = nodeElements.entrySet().stream()
                 .filter(entry -> entry.getKey().equals(ROOT))
                 .map(Map.Entry::getValue)

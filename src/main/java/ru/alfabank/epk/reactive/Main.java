@@ -1,5 +1,7 @@
 package ru.alfabank.epk.reactive;
 
+import org.apache.xmlbeans.impl.common.Sax2Dom;
+
 import java.util.Set;
 
 public class Main {
@@ -20,9 +22,11 @@ public class Main {
             XPathExporter xPathExporter2 = new XPathExporter(
                     "UWSConsumerSubjectInfoGetInOutParms28.xsd",
                     Set.of(
-                            "UWSConsumerSubjectInfoGetGetInParms" // TODO
+                            "UWSConsumerSubjectInfoGetGetInParms",
+                            "UWSConsumerSubjectInfoGetGetOutParms" // TODO
                     )
             );
             xPathExporter2.xsdToCsv();
         }
+
 }
