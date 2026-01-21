@@ -16,23 +16,26 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
-@RequiredArgsConstructor
 public class SaxXsdReader {
 
     public static final String PATH = "src/main/resources";
 
-    public void readXsd(String fileName, boolean isTreeFile, boolean isCsvFile, boolean isTreeLogs, boolean isCsvLogs)
+    public Path readXsd(String fileName, boolean isTreeFile, boolean isCsvFile, boolean isTreeLogs, boolean isCsvLogs,
+                        boolean isHeader, String resultName)
             throws ParserConfigurationException, SAXException, IOException {
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
         XMLReader reader = sp.getXMLReader();
-        reader.setContentHandler(new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs));
+        SchemaSaxHandler schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName);
+        reader.setContentHandler(schemaSaxHandler);
         reader.parse(new InputSource(new FileInputStream(new File(PATH, fileName))));
+        return schemaSaxHandler.getGeneratedCsvPath();
     }
 }
 
@@ -71,6 +74,11 @@ class SchemaSaxHandler extends DefaultHandler {
     private final boolean isCsvFile;
     private final boolean isTreeLogs;
     private final boolean isCsvLogs;
+    private final boolean isHeader;
+    private final String resultName;
+
+    @Getter
+    private Path generatedCsvPath;
 
     // temporary - always null when tag closes
     private String currentSimpleTypeName;
@@ -89,26 +97,37 @@ class SchemaSaxHandler extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
+        Path resultTreePath = generateResultPath(resultName, "txt");
+        Path resultCsvPath = generateResultPath(resultName, "csv");
         rootElements.forEach(rootElement -> {
             makeTree(rootElement);
 
             if (isTreeFile || isTreeLogs) {
+
+
                 if (isTreeLogs) printTree(rootElement, "");
-                if (isTreeFile) exportResultToFile(rootElement.getName(), "txt", treeLines);
+                if (isTreeFile) {
+                    exportResultToFile(resultTreePath, treeLines);
+                    treeLines = new ArrayList<>();
+                }
                 System.out.println(System.lineSeparator());
             }
 
             if (isCsvLogs || isCsvFile) {
+                if (isCsvLogs && isHeader) System.out.println(getCsvHeader());
+
+//                if (isCsvFile && isHeader) csvLines.add(getCsvHeader());  //todo хэдеры в файл не катит ставить
                 generateXPathCsv(rootElement, "", isCsvFile, isCsvLogs);
-
-                if (isCsvLogs)  System.out.println(getCsvHeader());
-
                 if (isCsvFile) {
-                    csvLines.add(getCsvHeader());
-                    exportResultToFile(rootElement.getName(), "csv", csvLines);
+                    exportResultToFile(resultCsvPath, csvLines);
+                    csvLines = new ArrayList<>();
                 }
             }
         });
+    }
+
+    private static Path generateResultPath(String name, String format) {
+        return Path.of("src/main/resources/generated/" + LocalDateTime.now() + "__" + name + "." + format).toAbsolutePath();
     }
 
     public void makeTree(SchemaElement element) {
@@ -183,14 +202,18 @@ class SchemaSaxHandler extends DefaultHandler {
 
     }
 
-    private void exportResultToFile(String name, String fileFormat, List<String> lines) {
-        Path resultPath = Path.of("src/main/resources/generated/" + LocalDateTime.now() + "__" + name + "." + fileFormat).toAbsolutePath();
+    private void exportResultToFile(Path resultPath, List<String> lines) {
         String fileStr = lines.stream().collect(Collectors.joining(System.lineSeparator()));
         try {
-            Files.writeString(resultPath, fileStr);
+            if (Files.exists(resultPath)) {
+                Files.writeString(resultPath, fileStr, StandardOpenOption.APPEND);
+            } else {
+                Files.writeString(resultPath, fileStr);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        generatedCsvPath = resultPath;
     }
 
     private String getCsvHeader() {
@@ -223,7 +246,6 @@ class SchemaSaxHandler extends DefaultHandler {
             }
         }
     }
-
 
 
     private void printTree(SchemaElement element, String indent) {

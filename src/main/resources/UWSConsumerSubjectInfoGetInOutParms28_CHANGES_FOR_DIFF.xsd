@@ -6550,7 +6550,7 @@
 	<xsd:complexType name="UWSConsumerSubjectInfoGetGetGoldRecInParms">
 		<xsd:sequence>
 <!--			<xsd:element minOccurs="0" name="extSysUserSession" type="wsct:WSTypeChar255"> -->
-			<xsd:element minOccurs="0" name="extSysUserSession" type="wsct:WSTypeChar256">
+			<xsd:element minOccurs="0" name="extSysUserSession" type="wsct:WSTypeChar175">
 				<xsd:annotation>
 					<xsd:documentation>Мнемоника канала фиксации отклика
 					</xsd:documentation>
