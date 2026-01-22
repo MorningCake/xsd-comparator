@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,18 @@ public class SaxXsdReader {
         SchemaSaxHandler schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName);
         reader.setContentHandler(schemaSaxHandler);
         reader.parse(new InputSource(new FileInputStream(new File(PATH, fileName))));
+        return schemaSaxHandler.getGeneratedCsvPath();
+    }
+
+    public Path readXsdByFilePath(File filePath, boolean isTreeFile, boolean isCsvFile, boolean isTreeLogs, boolean isCsvLogs,
+                        boolean isHeader, String resultName)
+            throws ParserConfigurationException, SAXException, IOException {
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        SAXParser sp = spf.newSAXParser();
+        XMLReader reader = sp.getXMLReader();
+        SchemaSaxHandler schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName);
+        reader.setContentHandler(schemaSaxHandler);
+        reader.parse(new InputSource(new FileInputStream(filePath)));
         return schemaSaxHandler.getGeneratedCsvPath();
     }
 }
@@ -127,7 +140,11 @@ class SchemaSaxHandler extends DefaultHandler {
     }
 
     private static Path generateResultPath(String name, String format) {
-        return Path.of("src/main/resources/generated/" + LocalDateTime.now() + "__" + name + "." + format).toAbsolutePath();
+        return Path.of(
+                "src/main/resources/generated/" +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm-ss")) +
+                "__" + name + "." + format
+        ).toAbsolutePath();
     }
 
     public void makeTree(SchemaElement element) {

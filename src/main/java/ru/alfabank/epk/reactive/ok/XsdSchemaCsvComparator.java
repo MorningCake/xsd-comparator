@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,7 +51,11 @@ public class XsdSchemaCsvComparator {
     }
 
     private Path exportResultToFile(String name, String fileFormat, List<String> lines) {
-        Path resultPath = Path.of("src/main/resources/generated/" + LocalDateTime.now() + "__" + name + "." + fileFormat).toAbsolutePath();
+        Path resultPath = Path.of(
+                "src/main/resources/generated/" +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm-ss"))
+                + "__" + name + "." + fileFormat
+        ).toAbsolutePath();
         String fileStr = lines.stream().collect(Collectors.joining(System.lineSeparator()));
         try {
             Files.writeString(resultPath, fileStr);

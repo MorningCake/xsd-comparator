@@ -1,5 +1,13 @@
 ## Инструкция
 
+### Запуск через UI
+Запустить [UiMain.java](src/main/java/ru/alfabank/epk/reactive/ui/UiMain.java) - откроется такой UI :-) <br>
+![img_1.png](img_1.png)
+<br><br>В результате выполнения получим файлы, которые можно сохранить на диск:<br>
+![img_2.png](img_2.png) <br>
+![img_3.png](img_3.png)
+
+### Запуск алгоритмов
 1) xsd-схемы - положить в папку [resources](src/main/resources)
 2) сгенерированные файлы будут в папке [generated](src/main/resources/generated). `Сгенерированные файлы можно удалять, нельзя удалять саму папку!`
 3) режим парсинга одной схемы - [ParserMain.java](src/main/java/ru/alfabank/epk/reactive/ok/ParserMain.java)
