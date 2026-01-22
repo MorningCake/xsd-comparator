@@ -206,7 +206,7 @@ class SchemaSaxHandler extends DefaultHandler {
         String fileStr = lines.stream().collect(Collectors.joining(System.lineSeparator()));
         try {
             if (Files.exists(resultPath)) {
-                Files.writeString(resultPath, fileStr, StandardOpenOption.APPEND);
+                Files.writeString(resultPath, System.lineSeparator() + fileStr, StandardOpenOption.APPEND);
             } else {
                 Files.writeString(resultPath, fileStr);
             }
