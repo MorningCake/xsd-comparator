@@ -5,9 +5,8 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
 
-public class XsdReaderMain {
+public class ComparatorMain {
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
         // todo писать все методы в один файл ?
         SaxXsdReader saxReader = new SaxXsdReader();
