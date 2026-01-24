@@ -22,7 +22,7 @@ public class UiProcessor {
     public void process(
             String parsingName1, String parsingName2, File xsdFile1, File xsdFile2, JPanel downloadPanel,
             JPanel treePanel
-    ) throws ParserConfigurationException, IOException, SAXException {
+    ) {
         if (Strings.isBlank(parsingName1) || Strings.isBlank(parsingName2) || xsdFile1 == null || xsdFile2 == null)
             throw new RuntimeException("Не заполнены необходимые поля!");
         // очистка папки generated
@@ -35,15 +35,17 @@ public class UiProcessor {
                     throw new RuntimeException(e);
                 }
             });
+        } catch (IOException e) {
+            throw new RuntimeException("Ошибка при очистке temp директории (src/main/resources/generated)");
         }
         // логика обработки данных
         SaxXsdReader saxReader = new SaxXsdReader();
         Path path1 = saxReader.readXsdByFilePath(xsdFile1,
-                false, true, false, false, false, parsingName1);
+                    false, true, false, false, false, parsingName1);
 
         SaxXsdReader saxReader2 = new SaxXsdReader();
         Path path2 = saxReader2.readXsdByFilePath(xsdFile2,
-                false, true, false, false, false, parsingName2);
+                    false, true, false, false, false, parsingName2);
 
         XsdSchemaCsvComparator csvComparator = new XsdSchemaCsvComparator();
         Path compared = csvComparator.compare(path1, path2);
@@ -53,7 +55,7 @@ public class UiProcessor {
     }
 
     private void createTriesWithDiff(JPanel treePanel,
-                                     Path path1, Path path2, Path compared) throws IOException {
+                                     Path path1, Path path2, Path compared) {
 
         JXTreeTable leftTreeTable = TreeTableGenerator.generate(path1, compared, TreeTableGenerator.TreeType.LEFT);
         JXTreeTable rightTreeTable = TreeTableGenerator.generate(path2, compared, TreeTableGenerator.TreeType.RIGHT);
@@ -91,16 +93,21 @@ public class UiProcessor {
                 // Копируем файл из исходного расположения в указанное пользователем
                 copyFile(originalFilename, destinationFile);
                 JOptionPane.showMessageDialog(parent, "Файл успешно сохранён: " + destinationFile.getAbsolutePath());
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(parent, "Ошибка при сохранении файла: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     // Вспомогательный метод для копирования файла
-    private void copyFile(String sourceFilename, File destinationFile) throws IOException {
+    private void copyFile(String sourceFilename, File destinationFile) {
         Path sourcePath = Paths.get(sourceFilename);
         Path destPath = destinationFile.toPath();
-        Files.copy(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
+        try {
+            Files.copy(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException("Ошибка при копировании файла " + sourceFilename + " из temp " +
+                                       "(src/main/resources/generated) в директорию " + destinationFile.getName());
+        }
     }
 }

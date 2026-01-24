@@ -8,6 +8,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.Arrays;
 
 public class UiMain extends JFrame {
 
@@ -162,15 +163,9 @@ public class UiMain extends JFrame {
         try {
             processor.process(text1, text2, selectedFile1, selectedFile2, downloadPanel, topSouthPanel);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(
-                    this, // Текущий компонент (например, JFrame)
-                    ex.getMessage(),
-                    "Ошибка!",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ошибка!", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(ex.getMessage());
         }
-
     }
 
     public static void main(String[] args) {

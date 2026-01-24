@@ -1,9 +1,33 @@
 ## Инструкция
 
+### XSD-файлы
+В схеме обязательно должны присутствовать корневые элементы `<element>`, и строго после начинаются complexType
+```xml
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+          targetNamespace="http://UWSConsumerSubjectInfoGetInOutParms29.MDM.uws.alfabank.ru" 
+          xmlns:tns="http://UWSConsumerSubjectInfoGetInOutParms29.MDM.uws.alfabank.ru" 
+          xmlns:wsct="http://WSCommonTypes10.CS.ws.alfabank.ru">
+	<xsd:import namespace="http://WSCommonTypes10.CS.ws.alfabank.ru" schemaLocation="WSCommonTypes10.xsd"/>
+
+	<!-- Element Definitions -->
+	<xsd:element name="UWSConsumerSubjectInfoGetGetInParms" type="UWSConsumerSubjectInfoGetGetInParms"/>
+	<xsd:element name="UWSConsumerSubjectInfoGetGetOutParms" type="UWSConsumerSubjectInfoGetGetOutParms"/>
+
+    <xsd:complexType name="UWSConsumerSubjectInfoGetGetInParms">
+       <!-- ... -->
+    </xsd:complexType>
+
+   <xsd:complexType name="UWSConsumerSubjectInfoGetGetOutParms">
+      <!-- ... -->
+   </xsd:complexType>
+</xsd:schema>
+
+```
+
 ### Запуск через UI
 Запустить [UiMain.java](src/main/java/ru/alfabank/epk/reactive/ui/UiMain.java) - откроется такой UI :-) <br>
 ![img_1.png](img_1.png)
-<br><br>В результате выполнения получим файлы, которые можно сохранить на диск:<br>
+<br><br>В результате выполнения получим файлы, которые можно сохранить на диск, и дерево сравнения схем с подсветкой отличий:<br>
 ![img_2.png](img_2.png) <br>
 ![img_3.png](img_3.png)
 

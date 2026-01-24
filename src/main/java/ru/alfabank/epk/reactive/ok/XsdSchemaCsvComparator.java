@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class XsdSchemaCsvComparator {
 
-    public Path compare(Path path1, Path path2) throws ParserConfigurationException, IOException, SAXException {
+    public Path compare(Path path1, Path path2) {
         Set<String> csvLines1 = readCsv(path1);
         Set<String> csvLines2 = readCsv(path2);
 
@@ -65,8 +65,12 @@ public class XsdSchemaCsvComparator {
         return resultPath;
     }
 
-    private static Set<String> readCsv(Path path) throws ParserConfigurationException, SAXException, IOException {
-        return new LinkedHashSet<>(Files.readAllLines(path));
+    private static Set<String> readCsv(Path path) {
+        try {
+            return new LinkedHashSet<>(Files.readAllLines(path));
+        } catch (IOException e) {
+            throw new RuntimeException("Ошибка при чтении файла " + path);
+        }
     }
 
     /**

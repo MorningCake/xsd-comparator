@@ -28,26 +28,38 @@ public class SaxXsdReader {
     public static final String PATH = "src/main/resources";
 
     public Path readXsd(String fileName, boolean isTreeFile, boolean isCsvFile, boolean isTreeLogs, boolean isCsvLogs,
-                        boolean isHeader, String resultName)
-            throws ParserConfigurationException, SAXException, IOException {
+                        boolean isHeader, String resultName) {
         SAXParserFactory spf = SAXParserFactory.newInstance();
-        SAXParser sp = spf.newSAXParser();
-        XMLReader reader = sp.getXMLReader();
-        SchemaSaxHandler schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName);
-        reader.setContentHandler(schemaSaxHandler);
-        reader.parse(new InputSource(new FileInputStream(new File(PATH, fileName))));
+        SchemaSaxHandler schemaSaxHandler;
+        try {
+            SAXParser sp = spf.newSAXParser();
+            XMLReader reader = sp.getXMLReader();
+            schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName);
+            reader.setContentHandler(schemaSaxHandler);
+            reader.parse(new InputSource(new FileInputStream(new File(PATH, fileName))));
+        } catch (SAXException | ParserConfigurationException ex) {
+            throw new RuntimeException("Внутренняя ошибка - (парсер xml): " + ex.getMessage());
+        } catch (IOException ex) {
+            throw new RuntimeException("Внутренняя ошибка при чтении файла " + fileName + ": " + ex.getMessage());
+        }
         return schemaSaxHandler.getGeneratedCsvPath();
     }
 
     public Path readXsdByFilePath(File filePath, boolean isTreeFile, boolean isCsvFile, boolean isTreeLogs, boolean isCsvLogs,
-                        boolean isHeader, String resultName)
-            throws ParserConfigurationException, SAXException, IOException {
+                        boolean isHeader, String resultName) {
         SAXParserFactory spf = SAXParserFactory.newInstance();
-        SAXParser sp = spf.newSAXParser();
-        XMLReader reader = sp.getXMLReader();
-        SchemaSaxHandler schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName);
-        reader.setContentHandler(schemaSaxHandler);
-        reader.parse(new InputSource(new FileInputStream(filePath)));
+        SchemaSaxHandler schemaSaxHandler;
+        try {
+            SAXParser sp = spf.newSAXParser();
+            XMLReader reader = sp.getXMLReader();
+            schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName);
+            reader.setContentHandler(schemaSaxHandler);
+            reader.parse(new InputSource(new FileInputStream(filePath)));
+        } catch (SAXException | ParserConfigurationException ex) {
+            throw new RuntimeException("Внутренняя ошибка - (парсер xml)!");
+        } catch (IOException ex) {
+            throw new RuntimeException("Внутренняя ошибка - ошибка при чтении файла " + filePath);
+        }
         return schemaSaxHandler.getGeneratedCsvPath();
     }
 }
@@ -109,9 +121,12 @@ class SchemaSaxHandler extends DefaultHandler {
     private List<SchemaElement> rootElements = new ArrayList<>();
 
     @Override
-    public void endDocument() throws SAXException {
+    public void endDocument() {
         Path resultTreePath = generateResultPath(resultName, "txt");
         Path resultCsvPath = generateResultPath(resultName, "csv");
+        if (rootElements.size() == 0)
+            throw new RuntimeException("Не обнаружены корни в схеме " + resultName +
+                                       "! В схеме должны присутствовать корневые элементы <xsd:element>!");
         rootElements.forEach(rootElement -> {
             makeTree(rootElement);
 
@@ -160,7 +175,7 @@ class SchemaSaxHandler extends DefaultHandler {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes atts) {
         if (qName.contains("simpleType")) {
             currentSimpleTypeName = atts.getValue("name");
         }
@@ -195,7 +210,7 @@ class SchemaSaxHandler extends DefaultHandler {
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
+    public void endElement(String uri, String localName, String qName) {
         if (qName.contains("simpleType")) {
             simpleTypes.put(currentSimpleTypeName, currentSimpleTypeBaseType);
             currentSimpleTypeName = null;

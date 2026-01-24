@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class ComparatorMain {
-    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
+    public static void main(String[] args) {
         SaxXsdReader saxReader = new SaxXsdReader();
         Path path1 = saxReader.readXsd("UWSConsumerSubjectInfoGetInOutParms28.xsd",
                 false, true, false, false, false, "28");
