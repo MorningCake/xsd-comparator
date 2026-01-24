@@ -1,17 +1,13 @@
 package ru.alfabank.epk.reactive.ui;
 
 import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
-import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.ArrayList;
 
 public class UiMain extends JFrame {
 
@@ -23,6 +19,7 @@ public class UiMain extends JFrame {
     private JLabel selectedFileLabel2;
     private JButton executeButton;
     private JPanel downloadPanel;
+    private JPanel topSouthPanel;
 
     private File selectedFile1;
     private File selectedFile2;
@@ -109,17 +106,17 @@ public class UiMain extends JFrame {
         // Основная панель с двумя колонками для размещения JTreeTable
         JPanel southPanel = new JPanel(new BorderLayout());
 
-        JPanel topSouthPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+        topSouthPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         topSouthPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         Dimension preferredSize3 = new Dimension(1000, 550);
         topSouthPanel.setPreferredSize(preferredSize3);
 
         // Левое дерево
-        JXTreeTable leftTreeTable = createCustomizedTreeTable("Левое дерево");
+        JXTreeTable leftTreeTable = TreeTableGenerator.initGenerate("xsd1");
         topSouthPanel.add(new JScrollPane(leftTreeTable));
 
         // Правое дерево
-        JXTreeTable rightTreeTable = createCustomizedTreeTable("Правое дерево");
+        JXTreeTable rightTreeTable = TreeTableGenerator.initGenerate("xsd2");
         topSouthPanel.add(new JScrollPane(rightTreeTable));
         southPanel.add(topSouthPanel, BorderLayout.NORTH);
 
@@ -137,73 +134,6 @@ public class UiMain extends JFrame {
         pack();
         setLocationRelativeTo(null);
     }
-
-        private JXTreeTable createCustomizedTreeTable(String title) {
-            // Создаем модель данных для дерева
-            ArrayNode root = new ArrayNode(new Object[] {"root", "0"});
-            for (int i = 0; i < 5; i++) {
-                ArrayNode arrayNode = new ArrayNode(new Object[]{"child", "" + i});
-                root.add(arrayNode);
-                for (int j = 0; j < 5; j++) {
-                    arrayNode.add(new ArrayNode(new Object[]{"sub-child", "" + j}));
-                }
-            }
-
-
-
-
-            JXTreeTable treeTable = new JXTreeTable(new DefaultTreeTableModel(root, new ArrayList<>(java.util.List.of("name", "index"))));
-//            JXTreeTable table = new JXTreeTable(new DefaultTreeTableModel(root));
-
-            treeTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer());
-            treeTable.setTreeCellRenderer(new TreeTableCustomizer());
-
-            // Возвращаем созданный JTreeTable
-            return treeTable;
-        }
-
-//    private static JXTreeTable getJxTreeTable(MutableTreeTableNode root)  {
-//        AbstractTreeTableModel model = new AbstractTreeTableModel(root) {
-//
-//            @Override
-//            public Object getChild(Object parent, int index) {
-//                return ((DefaultMutableTreeTableNode) parent).getChildAt(index);
-//            }
-//
-//            @Override
-//            public int getChildCount(Object parent) {
-//                return ((DefaultMutableTreeTableNode) parent).getChildCount();
-//            }
-//
-//            @Override
-//            public int getIndexOfChild(Object parent, Object child) {
-//                return 0;
-//            }
-//
-//            @Override
-//            public Object getValueAt(Object node, int column) {
-//                return ((DefaultMutableTreeTableNode) node).getValueAt(column);
-//            }
-//
-//            @Override
-//            public int getColumnCount() {
-//                return 2;
-//            }
-//
-//            @Override
-//            public String getColumnName(int column) {
-//                return switch (column) {
-//                    case 0 -> "ID";
-//                    case 1 -> "Данные";
-//                    default -> "";
-//                    };
-//            }
-//        };
-//
-//        // Создаем JTreeTable
-//        JXTreeTable treeTable = new JXTreeTable(model);
-//        return treeTable;
-//    }
 
     private void selectFileAndUpdateLabel(int buttonNumber) {
         JFileChooser chooser = new JFileChooser();
@@ -230,7 +160,7 @@ public class UiMain extends JFrame {
 
         UiProcessor processor = new UiProcessor();
         try {
-            processor.process(text1, text2, selectedFile1, selectedFile2, downloadPanel);
+            processor.process(text1, text2, selectedFile1, selectedFile2, downloadPanel, topSouthPanel);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(
                     this, // Текущий компонент (например, JFrame)

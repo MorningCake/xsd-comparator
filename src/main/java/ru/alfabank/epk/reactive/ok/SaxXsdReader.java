@@ -116,8 +116,6 @@ class SchemaSaxHandler extends DefaultHandler {
             makeTree(rootElement);
 
             if (isTreeFile || isTreeLogs) {
-
-
                 if (isTreeLogs) printTree(rootElement, "");
                 if (isTreeFile) {
                     exportResultToFile(resultTreePath, treeLines);
@@ -125,11 +123,8 @@ class SchemaSaxHandler extends DefaultHandler {
                 }
                 System.out.println(System.lineSeparator());
             }
-
             if (isCsvLogs || isCsvFile) {
                 if (isCsvLogs && isHeader) System.out.println(getCsvHeader());
-
-//                if (isCsvFile && isHeader) csvLines.add(getCsvHeader());  //todo хэдеры в файл не катит ставить
                 generateXPathCsv(rootElement, "", isCsvFile, isCsvLogs);
                 if (isCsvFile) {
                     exportResultToFile(resultCsvPath, csvLines);
@@ -270,7 +265,6 @@ class SchemaSaxHandler extends DefaultHandler {
         treeLines.add(getTreeLine(element, indent));
 
 // TODO пока не нужны
-
 //        Map<String, String> attributes = element.getAttributes();
 //        if (attributes != null) {
 //            for (Map.Entry<String, String> entry : attributes.entrySet()) {

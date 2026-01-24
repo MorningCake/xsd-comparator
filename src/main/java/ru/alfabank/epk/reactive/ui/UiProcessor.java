@@ -1,6 +1,7 @@
 package ru.alfabank.epk.reactive.ui;
 
 import org.apache.logging.log4j.util.Strings;
+import org.jdesktop.swingx.JXTreeTable;
 import org.xml.sax.SAXException;
 import ru.alfabank.epk.reactive.ok.SaxXsdReader;
 import ru.alfabank.epk.reactive.ok.XsdSchemaCsvComparator;
@@ -18,8 +19,10 @@ import java.util.stream.Stream;
 
 public class UiProcessor {
 
-    public void process(String parsingName1, String parsingName2, File xsdFile1, File xsdFile2, JPanel downloadPanel)
-            throws ParserConfigurationException, IOException, SAXException {
+    public void process(
+            String parsingName1, String parsingName2, File xsdFile1, File xsdFile2, JPanel downloadPanel,
+            JPanel treePanel
+    ) throws ParserConfigurationException, IOException, SAXException {
         if (Strings.isBlank(parsingName1) || Strings.isBlank(parsingName2) || xsdFile1 == null || xsdFile2 == null)
             throw new RuntimeException("Не заполнены необходимые поля!");
         // очистка папки generated
@@ -33,7 +36,6 @@ public class UiProcessor {
                 }
             });
         }
-
         // логика обработки данных
         SaxXsdReader saxReader = new SaxXsdReader();
         Path path1 = saxReader.readXsdByFilePath(xsdFile1,
@@ -44,11 +46,27 @@ public class UiProcessor {
                 false, true, false, false, false, parsingName2);
 
         XsdSchemaCsvComparator csvComparator = new XsdSchemaCsvComparator();
-
         Path compared = csvComparator.compare(path1, path2);
-        // Пример создания ссылок для скачивания результатов
+        // Создание ссылок для скачивания результатов
         createDownloadLinks(downloadPanel, path1.toString(), path2.toString(), compared.toString());
+        createTriesWithDiff(treePanel, path1, path2, compared);
     }
+
+    private void createTriesWithDiff(JPanel treePanel,
+                                     Path path1, Path path2, Path compared) throws IOException {
+
+        JXTreeTable leftTreeTable = TreeTableGenerator.generate(path1, compared, TreeTableGenerator.TreeType.LEFT);
+        JXTreeTable rightTreeTable = TreeTableGenerator.generate(path2, compared, TreeTableGenerator.TreeType.RIGHT);
+
+        treePanel.removeAll();
+
+        treePanel.add(new JScrollPane(leftTreeTable));
+        treePanel.add(new JScrollPane(rightTreeTable));
+
+        treePanel.revalidate();
+        treePanel.repaint();
+    }
+
 
     protected void createDownloadLinks(JPanel panel, String... filenames) {
         panel.removeAll(); // Удаляем все предыдущие компоненты

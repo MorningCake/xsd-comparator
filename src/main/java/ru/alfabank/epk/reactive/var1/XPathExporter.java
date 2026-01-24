@@ -58,8 +58,6 @@ public class XPathExporter {
 
         // Начало рекурсивного обхода, формирование относительных xPath
         processNode(doc.getDocumentElement(), "", null);
-        // Найти корни
-//        rootsSearch(); // TODO
         // Коррекция и выделение полных xPath
         xPathCorrection();
     }
@@ -91,7 +89,6 @@ public class XPathExporter {
                 nodeType = (isSchemaChild ? "" : null);
             }
 
-//            String nodeStr = (nodeType == null || nodeType.isEmpty()) ? nodeName : nodeName + "(" + nodeType + ")";
             String nodeStr = nodeName;
             fullPath = parentPath.isEmpty() ? nodeStr : parentPath + "/" + nodeStr;
 
@@ -100,7 +97,6 @@ public class XPathExporter {
 
                 String parentName = parentPath.split("/")[0];
 
-                // todo убрать после отладки
                 System.out.println(fullPath);
 
                 xPathElement = XPathElement.builder()
@@ -182,7 +178,7 @@ public class XPathExporter {
 
         List<XPathElement> roots = rootsOptional.get();
         for (XPathElement root : roots) {
-            root.setFullXpath(""); //todo
+            root.setFullXpath("");
             elementsCorrection(root);
         }
     }
