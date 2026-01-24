@@ -2,10 +2,12 @@ package ru.alfabank.epk.reactive.ui;
 
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
+import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -109,22 +111,22 @@ public class UiMain extends JFrame {
 
         JPanel topSouthPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         topSouthPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        Dimension preferredSize3 = new Dimension(1000, 520);
+        Dimension preferredSize3 = new Dimension(1000, 550);
         topSouthPanel.setPreferredSize(preferredSize3);
 
         // Левое дерево
         JXTreeTable leftTreeTable = createCustomizedTreeTable("Левое дерево");
-        topSouthPanel.add(leftTreeTable);
+        topSouthPanel.add(new JScrollPane(leftTreeTable));
 
         // Правое дерево
         JXTreeTable rightTreeTable = createCustomizedTreeTable("Правое дерево");
-        topSouthPanel.add(rightTreeTable);
+        topSouthPanel.add(new JScrollPane(rightTreeTable));
         southPanel.add(topSouthPanel, BorderLayout.NORTH);
 
         // Область для скачивания результатов
         downloadPanel = new JPanel();
         downloadPanel.setBorder(BorderFactory.createTitledBorder("Файлы для скачивания:"));
-        downloadPanel.setPreferredSize(new Dimension(0, 150));
+        downloadPanel.setPreferredSize(new Dimension(0, 130));
         southPanel.add(downloadPanel, BorderLayout.SOUTH);
         add(southPanel, BorderLayout.SOUTH);
 
@@ -147,11 +149,17 @@ public class UiMain extends JFrame {
                 }
             }
 
-            JXTreeTable table = new JXTreeTable(new DefaultTreeTableModel(root, new ArrayList<>(java.util.List.of("name", "index"))));
+
+
+
+            JXTreeTable treeTable = new JXTreeTable(new DefaultTreeTableModel(root, new ArrayList<>(java.util.List.of("name", "index"))));
 //            JXTreeTable table = new JXTreeTable(new DefaultTreeTableModel(root));
 
+            treeTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer());
+            treeTable.setTreeCellRenderer(new TreeTableCustomizer());
+
             // Возвращаем созданный JTreeTable
-            return table;
+            return treeTable;
         }
 
 //    private static JXTreeTable getJxTreeTable(MutableTreeTableNode root)  {

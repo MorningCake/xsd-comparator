@@ -33,4 +33,10 @@ public class ArrayNode extends AbstractMutableTreeTableNode {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return getValueAt(0).toString();
+    }
+
+
 }
