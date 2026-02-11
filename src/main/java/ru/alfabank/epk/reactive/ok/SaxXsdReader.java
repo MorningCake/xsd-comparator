@@ -28,13 +28,13 @@ public class SaxXsdReader {
     public static final String PATH = "src/main/resources";
 
     public Path readXsd(String fileName, boolean isTreeFile, boolean isCsvFile, boolean isTreeLogs, boolean isCsvLogs,
-                        boolean isHeader, String resultName) {
+                        boolean isHeader, String resultName, boolean onlyXPathMode) {
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SchemaSaxHandler schemaSaxHandler;
         try {
             SAXParser sp = spf.newSAXParser();
             XMLReader reader = sp.getXMLReader();
-            schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName);
+            schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName, onlyXPathMode);
             reader.setContentHandler(schemaSaxHandler);
             reader.parse(new InputSource(new FileInputStream(new File(PATH, fileName))));
         } catch (SAXException | ParserConfigurationException ex) {
@@ -46,13 +46,13 @@ public class SaxXsdReader {
     }
 
     public Path readXsdByFilePath(File filePath, boolean isTreeFile, boolean isCsvFile, boolean isTreeLogs, boolean isCsvLogs,
-                        boolean isHeader, String resultName) {
+                        boolean isHeader, String resultName, boolean onlyXPathMode) {
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SchemaSaxHandler schemaSaxHandler;
         try {
             SAXParser sp = spf.newSAXParser();
             XMLReader reader = sp.getXMLReader();
-            schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName);
+            schemaSaxHandler = new SchemaSaxHandler(isTreeFile, isCsvFile, isTreeLogs, isCsvLogs, isHeader, resultName, onlyXPathMode);
             reader.setContentHandler(schemaSaxHandler);
             reader.parse(new InputSource(new FileInputStream(filePath)));
         } catch (SAXException | ParserConfigurationException ex) {
@@ -101,6 +101,8 @@ class SchemaSaxHandler extends DefaultHandler {
     private final boolean isCsvLogs;
     private final boolean isHeader;
     private final String resultName;
+
+    private final boolean onlyXPathCsv;
 
     @Getter
     private Path generatedCsvPath;
@@ -226,7 +228,6 @@ class SchemaSaxHandler extends DefaultHandler {
             complexTypes.put(Objects.requireNonNull(currentComplexType).getName(), currentComplexType);
             currentComplexType = null;
         }
-
     }
 
     private void exportResultToFile(Path resultPath, List<String> lines) {
@@ -243,25 +244,9 @@ class SchemaSaxHandler extends DefaultHandler {
         generatedCsvPath = resultPath;
     }
 
-    private String getCsvHeader() {
-        return "name,type,xPath,minOccurs,maxOccurs";
-    }
-
-    private String getCsvString(String newParentPath, SchemaElement element) {
-        return element.getName() + "," +
-        element.getType() + "," +
-        newParentPath + "," +
-        defaultOrCurrentOccurs(element.getMinOccurs()) + "," +
-        defaultOrCurrentOccurs(element.getMaxOccurs());
-    }
-
-    private String defaultOrCurrentOccurs(String occurs) {
-        return occurs == null ? "1" : occurs;
-    }
-
     private void generateXPathCsv(SchemaElement element, String parentPath, boolean isCsvFile, boolean isCsvLogs) {
         String newParentPath = parentPath + "/" + element.getName();
-        String csvLine = getCsvString(newParentPath, element);
+        String csvLine = onlyXPathCsv ? getOnlyXPathCsvString(newParentPath) : getCsvString(newParentPath, element);
 
         if (isCsvLogs) System.out.println(csvLine);
         if (isCsvFile) csvLines.add(csvLine);
@@ -274,6 +259,25 @@ class SchemaSaxHandler extends DefaultHandler {
         }
     }
 
+    private static String getCsvHeader() {
+        return "name,type,xPath,minOccurs,maxOccurs";
+    }
+
+    private static String getCsvString(String newParentPath, SchemaElement element) {
+        return element.getName() + "," +
+        element.getType() + "," +
+        newParentPath + "," +
+        defaultOrCurrentOccurs(element.getMinOccurs()) + "," +
+        defaultOrCurrentOccurs(element.getMaxOccurs());
+    }
+
+    private static String defaultOrCurrentOccurs(String occurs) {
+        return occurs == null ? "1" : occurs;
+    }
+
+    private static String getOnlyXPathCsvString(String newParentPath) {
+        return newParentPath;
+    }
 
     private void printTree(SchemaElement element, String indent) {
         System.out.println(getTreeLine(element, indent));

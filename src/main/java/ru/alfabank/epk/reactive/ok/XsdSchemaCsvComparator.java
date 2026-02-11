@@ -2,20 +2,21 @@ package ru.alfabank.epk.reactive.ok;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class XsdSchemaCsvComparator {
 
-    public Path compare(Path path1, Path path2) {
+    public Path compare(Path path1, Path path2, boolean onlyXPath) {
         Set<String> csvLines1 = readCsv(path1);
         Set<String> csvLines2 = readCsv(path2);
 
@@ -27,7 +28,7 @@ public class XsdSchemaCsvComparator {
         List<String> csvLines = new ArrayList<>();
         String fileName1 = getFileName(path1);
         String fileName2 = getFileName(path2);
-        csvLines.add(getCsvHeader(fileName1, fileName2));
+        csvLines.add(onlyXPath ? getCsvHeaderOnlyXPath(fileName1, fileName2) : getCsvHeader(fileName1, fileName2));
 
         for (String intersection : intersections) {
             csvLines.add(intersection + ",+,+");
@@ -46,8 +47,11 @@ public class XsdSchemaCsvComparator {
         return fileNameWithFormat1.substring(0, fileNameWithFormat1.length()-4);
     }
 
-    private String getCsvHeader(String file1, String file2) {
+    private static String getCsvHeader(String file1, String file2) {
         return "name,type,xPath,minOccurs,maxOccurs," + file1 + "," + file2;
+    }
+    private static String getCsvHeaderOnlyXPath(String file1, String file2) {
+        return "xPath," + file1 + "," + file2;
     }
 
     private Path exportResultToFile(String name, String fileFormat, List<String> lines) {

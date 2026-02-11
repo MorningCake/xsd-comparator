@@ -1,6 +1,7 @@
-package ru.alfabank.epk.reactive.ui;
+package ru.alfabank.epk.reactive.ui.onlyXPath;
 
 import org.jdesktop.swingx.JXTreeTable;
+import ru.alfabank.epk.reactive.ui.TreeTableGenerator;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -9,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
-public class UiMain extends JFrame {
+public class UiMainOnlyXPath extends JFrame {
 
     private JTextField inputText1;
     private JTextField inputText2;
@@ -24,8 +25,8 @@ public class UiMain extends JFrame {
     private File selectedFile1;
     private File selectedFile2;
 
-    public UiMain() {
-        super("Сравнение двух xsd-схем");
+    public UiMainOnlyXPath() {
+        super("Сравнение XSD-схемы с CSV-файлом, содержащим только xPath из ini-файла");
         initUI();
     }
 
@@ -41,7 +42,7 @@ public class UiMain extends JFrame {
         // Первое поле ввода с надписью
         JPanel fieldGroup1 = new JPanel();
         fieldGroup1.setLayout(new BoxLayout(fieldGroup1, BoxLayout.Y_AXIS));
-        JLabel label1 = new JLabel("Название первой xsd-схемы:");
+        JLabel label1 = new JLabel("Название xsd-схемы:");
         label1.setFont(label1.getFont().deriveFont(Font.PLAIN, 12f));
         fieldGroup1.add(label1);
         inputText1 = new JTextField(20);
@@ -51,7 +52,7 @@ public class UiMain extends JFrame {
         // Второе поле ввода с надписью
         JPanel fieldGroup2 = new JPanel();
         fieldGroup2.setLayout(new BoxLayout(fieldGroup2, BoxLayout.Y_AXIS));
-        JLabel label2 = new JLabel("Название второй xsd-схемы:");
+        JLabel label2 = new JLabel("Название csv-файла (xPath из ini):");
         label2.setFont(label2.getFont().deriveFont(Font.PLAIN, 12f));
         fieldGroup2.add(label2);
         inputText2 = new JTextField(20);
@@ -69,7 +70,7 @@ public class UiMain extends JFrame {
 
         // Первая группа (кнопка и метка)
         JPanel group1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        selectFileButton1 = new JButton("Выбрать файл первой xsd-схемы");
+        selectFileButton1 = new JButton("Выбрать файл xsd-схемы");
         selectedFileLabel1 = new JLabel("Нет выбранного файла");
         group1.add(selectFileButton1);
         group1.add(selectedFileLabel1);
@@ -77,7 +78,7 @@ public class UiMain extends JFrame {
 
         // Вторая группа (кнопка и метка)
         JPanel group2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        selectFileButton2 = new JButton("Выбрать файл второй xsd-схемы");
+        selectFileButton2 = new JButton("Выбрать csv-файла (xPath из ini)");
         selectedFileLabel2 = new JLabel("Нет выбранного файла");
         group2.add(selectFileButton2);
         group2.add(selectedFileLabel2);
@@ -112,11 +113,11 @@ public class UiMain extends JFrame {
         topSouthPanel.setPreferredSize(preferredSize3);
 
         // Левое дерево
-        JXTreeTable leftTreeTable = TreeTableGenerator.initGenerate("xsd1");
+        JXTreeTable leftTreeTable = TreeTableGeneratorOnlyXPath.initGenerate("xsd");
         topSouthPanel.add(new JScrollPane(leftTreeTable));
 
         // Правое дерево
-        JXTreeTable rightTreeTable = TreeTableGenerator.initGenerate("xsd2");
+        JXTreeTable rightTreeTable = TreeTableGeneratorOnlyXPath.initGenerate("csv (xPath ini)");
         topSouthPanel.add(new JScrollPane(rightTreeTable));
         southPanel.add(topSouthPanel, BorderLayout.NORTH);
 
@@ -128,17 +129,17 @@ public class UiMain extends JFrame {
         add(southPanel, BorderLayout.SOUTH);
 
         // Регистрация слушателей для кнопок выбора файлов
-        selectFileButton1.addActionListener(e -> selectFileAndUpdateLabel(1));
-        selectFileButton2.addActionListener(e -> selectFileAndUpdateLabel(2));
+        selectFileButton1.addActionListener(e -> selectFileAndUpdateLabel(1, "xsd-схема (*.xsd)", "xsd"));
+        selectFileButton2.addActionListener(e -> selectFileAndUpdateLabel(2, "csv-файл (*.csv)", "csv"));
 
         pack();
         setLocationRelativeTo(null);
     }
 
-    private void selectFileAndUpdateLabel(int buttonNumber) {
+    private void selectFileAndUpdateLabel(int buttonNumber, String filterName, String... filterExtensions) {
         JFileChooser chooser = new JFileChooser();
         // Ограничиваем выбор только файлами с расширениями .txt и .log
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("xsd-схема (*.xsd)", "xsd");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(filterName, filterExtensions);
         chooser.setFileFilter(filter);
 
         int result = chooser.showOpenDialog(this);
@@ -158,7 +159,7 @@ public class UiMain extends JFrame {
         String text1 = inputText1.getText();
         String text2 = inputText2.getText();
 
-        UiProcessor processor = new UiProcessor();
+        UiProcessorOnlyXPath processor = new UiProcessorOnlyXPath();
         try {
             processor.process(text1, text2, selectedFile1, selectedFile2, downloadPanel, topSouthPanel);
         } catch (Exception ex) {
@@ -169,7 +170,7 @@ public class UiMain extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            UiMain app = new UiMain();
+            UiMainOnlyXPath app = new UiMainOnlyXPath();
             app.setVisible(true);
         });
     }
