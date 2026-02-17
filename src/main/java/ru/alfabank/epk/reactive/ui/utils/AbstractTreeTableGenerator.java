@@ -1,5 +1,6 @@
 package ru.alfabank.epk.reactive.ui.utils;
 
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
@@ -23,10 +24,20 @@ public abstract class AbstractTreeTableGenerator<T extends AbstractArrayNode, C 
     private final int rightFileLineColumn;
     private final int xpathColumn;
 
+    public JXTreeTable generateWithoutDiff(Path xsdCsvPath) {
+        List<T> xsdRoots = generateNodesTree(xsdCsvPath);
+
+        // создать общий корень swing дерева и привязать к нему узлы xsd
+        T treeRoot = arrayNodeFactory.createWithOnlyName("root");
+        for (T root : xsdRoots) {
+            treeRoot.add(root);
+        }
+        return generateCustomizedTreeTableFromTreeRoot(treeRoot, null, TreeType.LEFT);
+    }
+
     public JXTreeTable generate(Path xsdCsvPath, Path compared, TreeType type) {
-
+        // определить узлы, входящие только в данное дерево по compared csv
         List<String> comparedXsds = UiUtils.readAllLines(compared);
-
         Set<String> onlyXsdXPath = comparedXsds.stream()
                 .map(str -> str.split(","))
                 .filter(
@@ -36,6 +47,18 @@ public abstract class AbstractTreeTableGenerator<T extends AbstractArrayNode, C 
                 ).map(split -> split[xpathColumn])
                 .collect(Collectors.toSet());
 
+        List<T> xsdRoots = generateNodesTree(xsdCsvPath);
+
+        // создать общий корень swing дерева и привязать к нему узлы xsd
+        T treeRoot = arrayNodeFactory.createWithOnlyName("root");
+        for (T root : xsdRoots) {
+            treeRoot.add(root);
+        }
+        return generateCustomizedTreeTableFromTreeRoot(treeRoot, onlyXsdXPath, type);
+    }
+
+    /** Сгенерировать дерево для каждого корня xsd, вернуть список корней xsd */
+    public List<T> generateNodesTree(Path xsdCsvPath) {
         List<String> xsdCsv = UiUtils.readAllLines(xsdCsvPath);
 
         Map<String, List<T>> parentXPathsAndArrayNodesList = xsdCsv.stream()
@@ -43,21 +66,17 @@ public abstract class AbstractTreeTableGenerator<T extends AbstractArrayNode, C 
                 .map(arrayNodeFactory::create)
                 .collect(Collectors.groupingBy(T::getParentXPath, toList()));
 
-        // общий корень swing дерева
-        T treeRoot = arrayNodeFactory.createWithOnlyName("root");
-
         // найти корни xsd
         List<T> xsdRoots = parentXPathsAndArrayNodesList.values().stream()
                 .flatMap(Collection::stream)
                 .filter(T::isRoot)
                 .toList();
 
-        // для каждого корня запустить рекурсивный метод генерации дерева
+        // для каждого корня xsd запустить рекурсивный метод генерации дерева
         for (T root : xsdRoots) {
-            treeRoot.add(root);
             addChild(root, parentXPathsAndArrayNodesList);
         }
-        return generateCustomizedTreeTableFromTreeRoot(treeRoot, onlyXsdXPath, type);
+        return xsdRoots;
     }
 
     private void addChild(T parent, Map<String, List<T>> parentXPathsAndArrayNodesList) {
@@ -81,15 +100,16 @@ public abstract class AbstractTreeTableGenerator<T extends AbstractArrayNode, C 
     }
 
     private JXTreeTable generateCustomizedTreeTableFromTreeRoot(
-            T treeRoot, Set<String> onlyXsdXPath, TreeType treeType
+            T treeRoot, @Nullable Set<String> onlyXsdXPath, TreeType treeType
     ) {
         JXTreeTable treeTable = new JXTreeTable(new DefaultTreeTableModel(
                 treeRoot,
                 new ArrayList<>(arrayNodeFactory.getCsvHeader()))
         );
-
         treeTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer());
-        treeTable.setTreeCellRenderer(customizerFactory.create(onlyXsdXPath, treeType));
+        if (onlyXsdXPath != null) {
+            treeTable.setTreeCellRenderer(customizerFactory.create(onlyXsdXPath, treeType));
+        }
         treeTable.expandAll();
         return treeTable;
     }

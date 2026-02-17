@@ -105,6 +105,4 @@ public abstract class AbstractArrayNode extends AbstractMutableTreeTableNode {
         return getValueAt(nodeNameColumn).toString();
     }
 
-
-
 }

@@ -2,12 +2,11 @@ package ru.alfabank.epk.reactive.ok;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import ru.alfabank.epk.reactive.ui.utils.UiUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -26,8 +25,8 @@ public class XsdSchemaCsvComparator {
         List<String> onlyInSecond = findOnlyInSecond(csvLines1, csvLines2);
 
         List<String> csvLines = new ArrayList<>();
-        String fileName1 = getFileName(path1);
-        String fileName2 = getFileName(path2);
+        String fileName1 = UiUtils.getFileName(path1);
+        String fileName2 = UiUtils.getFileName(path2);
         csvLines.add(onlyXPath ? getCsvHeaderOnlyXPath(fileName1, fileName2) : getCsvHeader(fileName1, fileName2));
 
         for (String intersection : intersections) {
@@ -39,34 +38,15 @@ public class XsdSchemaCsvComparator {
         for (String first : onlyInSecond) {
             csvLines.add(first + ",-,+");
         }
-        return exportResultToFile("compare__" + fileName1 + "__" + fileName2, "csv", csvLines);
+        return UiUtils.exportResultToFile("compare__" + fileName1 + "__" + fileName2, "csv", csvLines);
     }
 
-    private static String getFileName(Path path1) {
-        String fileNameWithFormat1 = path1.getFileName().toString();
-        return fileNameWithFormat1.substring(0, fileNameWithFormat1.length()-4);
-    }
 
     private static String getCsvHeader(String file1, String file2) {
         return "name,type,xPath,minOccurs,maxOccurs," + file1 + "," + file2;
     }
     private static String getCsvHeaderOnlyXPath(String file1, String file2) {
         return "xPath," + file1 + "," + file2;
-    }
-
-    private Path exportResultToFile(String name, String fileFormat, List<String> lines) {
-        Path resultPath = Path.of(
-                "src/main/resources/generated/" +
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm-ss"))
-                + "__" + name + "." + fileFormat
-        ).toAbsolutePath();
-        String fileStr = lines.stream().collect(Collectors.joining(System.lineSeparator()));
-        try {
-            Files.writeString(resultPath, fileStr);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return resultPath;
     }
 
     private static Set<String> readCsv(Path path) {
