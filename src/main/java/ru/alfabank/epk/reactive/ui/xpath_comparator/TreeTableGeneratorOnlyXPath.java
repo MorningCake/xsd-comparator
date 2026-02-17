@@ -1,13 +1,11 @@
-package ru.alfabank.epk.reactive.ui.onlyXPath;
+package ru.alfabank.epk.reactive.ui.xpath_comparator;
 
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
-import ru.alfabank.epk.reactive.ui.ArrayNode;
-import ru.alfabank.epk.reactive.ui.TreeTableCustomizer;
+import ru.alfabank.epk.reactive.ui.utils.UiUtils;
 
 import javax.swing.table.DefaultTableCellRenderer;
-import java.io.IOException;
-import java.nio.file.Files;
+
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,12 +16,7 @@ public final class TreeTableGeneratorOnlyXPath {
 
     public static JXTreeTable generate(Path xsdCsvPath, Path compared, TreeType type) {
 
-        List<String> comparedXsds;
-        try {
-            comparedXsds = Files.readAllLines(compared);
-        } catch (IOException e) {
-            throw new RuntimeException("Ошибка при чтении файла " + compared);
-        }
+        List<String> comparedXsds = UiUtils.readAllLines(compared);
 
         Set<String> onlyXsdXPath = comparedXsds.stream()
                 .map(str -> str.split(","))
@@ -34,12 +27,7 @@ public final class TreeTableGeneratorOnlyXPath {
                 ).map(split -> split[0])
                 .collect(Collectors.toSet());
 
-        List<String> xsdCsv;
-        try {
-            xsdCsv = Files.readAllLines(xsdCsvPath);
-        } catch (IOException e) {
-            throw new RuntimeException("Ошибка при чтении файла " + xsdCsvPath);
-        }
+        List<String> xsdCsv = UiUtils.readAllLines(xsdCsvPath);
 
         Map<String, List<ArrayNodeOnlyXPath>> parentXPathsAndArrayNodesList = xsdCsv.stream()
                 .map(str -> (str + ", ").split(",")) // добавить 6ой элемент для заметок

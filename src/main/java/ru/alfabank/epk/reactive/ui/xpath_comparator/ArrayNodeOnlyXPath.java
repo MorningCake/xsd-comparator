@@ -1,4 +1,4 @@
-package ru.alfabank.epk.reactive.ui.onlyXPath;
+package ru.alfabank.epk.reactive.ui.xpath_comparator;
 
 import lombok.Getter;
 import org.jdesktop.swingx.treetable.AbstractMutableTreeTableNode;

@@ -39,7 +39,7 @@ gradlew.bat runUI
 ### Запуск UI из IDE
 На машине должен быть установлен JDK 21 или JRE 21.
 Переменная окружения JAVA_HOME должна смотреть на корень jdk-21.
-Запустить [UiMain.java](src/main/java/ru/alfabank/epk/reactive/ui/UiMain.java) - откроется такой UI :-) <br>
+Запустить [UiMain.java](src/main/java/ru/alfabank/epk/reactive/ui/xsd_comparator/UiMain.java) - откроется такой UI :-) <br>
 ![img_1.png](img_1.png)
 <br><br>В результате выполнения получим файлы, которые можно сохранить на диск, и дерево сравнения схем с подсветкой отличий:<br>
 ![img_2.png](img_2.png) <br>

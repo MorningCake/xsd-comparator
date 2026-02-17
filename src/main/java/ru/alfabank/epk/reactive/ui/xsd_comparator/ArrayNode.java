@@ -1,4 +1,4 @@
-package ru.alfabank.epk.reactive.ui;
+package ru.alfabank.epk.reactive.ui.xsd_comparator;
 
 import lombok.Getter;
 import org.jdesktop.swingx.treetable.AbstractMutableTreeTableNode;

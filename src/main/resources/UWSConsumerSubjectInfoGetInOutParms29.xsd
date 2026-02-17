@@ -5,13 +5,13 @@
 	<!--	<xsd:element name="UWSConsumerSubjectInfoGetGetInParms" type="UWSConsumerSubjectInfoGetGetInParms"/>-->
 	<!--	<xsd:element name="UWSConsumerSubjectInfoGetGetOutParms" type="UWSConsumerSubjectInfoGetGetOutParms"/>-->
 	<!--	-->
-	<!--	<xsd:element name="UWSConsumerSubjectInfoGetGetListInParms" type="UWSConsumerSubjectInfoGetGetListInParms"/>-->
+		<xsd:element name="UWSConsumerSubjectInfoGetGetListInParms" type="UWSConsumerSubjectInfoGetGetListInParms"/>
 	<!--	<xsd:element name="UWSConsumerSubjectInfoGetGetListOutParms" type="UWSConsumerSubjectInfoGetGetListOutParms"/>-->
 
-	<xsd:element name="UWSConsumerSubjectInfoGetGetGoldRecInParms" type="UWSConsumerSubjectInfoGetGetGoldRecInParms"/>
-	<xsd:element name="UWSConsumerSubjectInfoGetGetGoldRecOutParms" type="UWSConsumerSubjectInfoGetGetGoldRecOutParms"/>
+<!--	<xsd:element name="UWSConsumerSubjectInfoGetGetGoldRecInParms" type="UWSConsumerSubjectInfoGetGetGoldRecInParms"/>-->
+<!--	<xsd:element name="UWSConsumerSubjectInfoGetGetGoldRecOutParms" type="UWSConsumerSubjectInfoGetGetGoldRecOutParms"/>-->
 
-	<!--	<xsd:element name="UWSConsumerSubjectInfoGetGetListSubRelInParms" type="UWSConsumerSubjectInfoGetGetListSubRelInParms"/>-->
+<!--		<xsd:element name="UWSConsumerSubjectInfoGetGetListSubRelInParms" type="UWSConsumerSubjectInfoGetGetListSubRelInParms"/>-->
 	<!--	<xsd:element name="UWSConsumerSubjectInfoGetGetListSubRelOutParms" type="UWSConsumerSubjectInfoGetGetListSubRelOutParms"/>-->
 
 	<!-- Get начало -->

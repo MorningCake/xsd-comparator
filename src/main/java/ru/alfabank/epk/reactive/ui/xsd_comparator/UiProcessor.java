@@ -1,10 +1,9 @@
-package ru.alfabank.epk.reactive.ui.onlyXPath;
+package ru.alfabank.epk.reactive.ui.xsd_comparator;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jdesktop.swingx.JXTreeTable;
 import ru.alfabank.epk.reactive.ok.SaxXsdReader;
 import ru.alfabank.epk.reactive.ok.XsdSchemaCsvComparator;
-import ru.alfabank.epk.reactive.ui.TreeTableGenerator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,13 +15,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
-public class UiProcessorOnlyXPath {
+public class UiProcessor {
 
     public void process(
-            String parsingName1, String parsingName2, File xsdFile, File csvFile, JPanel downloadPanel,
+            String parsingName1, String parsingName2, File xsdFile1, File xsdFile2, JPanel downloadPanel,
             JPanel treePanel
     ) {
-        if (Strings.isBlank(parsingName1) || Strings.isBlank(parsingName2) || xsdFile == null || csvFile == null)
+        if (Strings.isBlank(parsingName1) || Strings.isBlank(parsingName2) || xsdFile1 == null || xsdFile2 == null)
             throw new RuntimeException("Не заполнены необходимые поля!");
         // очистка папки generated
         Path path = Path.of("src/main/resources/generated").toAbsolutePath();
@@ -39,13 +38,15 @@ public class UiProcessorOnlyXPath {
         }
         // логика обработки данных
         SaxXsdReader saxReader = new SaxXsdReader();
-        Path path1 = saxReader.readXsdByFilePath(xsdFile, false, true, false,
-                false, false, parsingName1, true);
+        Path path1 = saxReader.readXsdByFilePath(xsdFile1,
+                    false, true, false, false, false, parsingName1, false);
 
-        Path path2 = csvFile.toPath();
+        SaxXsdReader saxReader2 = new SaxXsdReader();
+        Path path2 = saxReader2.readXsdByFilePath(xsdFile2,
+                    false, true, false, false, false, parsingName2, false);
 
         XsdSchemaCsvComparator csvComparator = new XsdSchemaCsvComparator();
-        Path compared = csvComparator.compare(path1, path2, true);
+        Path compared = csvComparator.compare(path1, path2, false);
         // Создание ссылок для скачивания результатов
         createDownloadLinks(downloadPanel, path1.toString(), path2.toString(), compared.toString());
         createTriesWithDiff(treePanel, path1, path2, compared);
@@ -54,8 +55,8 @@ public class UiProcessorOnlyXPath {
     private void createTriesWithDiff(JPanel treePanel,
                                      Path path1, Path path2, Path compared) {
 
-        JXTreeTable leftTreeTable = TreeTableGeneratorOnlyXPath.generate(path1, compared, TreeTableGeneratorOnlyXPath.TreeType.LEFT);
-        JXTreeTable rightTreeTable = TreeTableGeneratorOnlyXPath.generate(path2, compared, TreeTableGeneratorOnlyXPath.TreeType.RIGHT);
+        JXTreeTable leftTreeTable = TreeTableGenerator.generate(path1, compared, TreeTableGenerator.TreeType.LEFT);
+        JXTreeTable rightTreeTable = TreeTableGenerator.generate(path2, compared, TreeTableGenerator.TreeType.RIGHT);
 
         treePanel.removeAll();
 

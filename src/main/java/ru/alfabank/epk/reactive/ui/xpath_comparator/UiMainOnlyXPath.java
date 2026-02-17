@@ -1,7 +1,6 @@
-package ru.alfabank.epk.reactive.ui.onlyXPath;
+package ru.alfabank.epk.reactive.ui.xpath_comparator;
 
 import org.jdesktop.swingx.JXTreeTable;
-import ru.alfabank.epk.reactive.ui.TreeTableGenerator;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

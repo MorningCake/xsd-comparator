@@ -9,8 +9,13 @@ repositories {
     mavenCentral()
 }
 
-task runUI(type: JavaExec) {
-    main = 'ru.alfabank.epk.reactive.ui.UiMain'
+task runXsdUI(type: JavaExec) {
+    main = 'ru.alfabank.epk.reactive.ui.xsd_comparator.UiMain'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task runXpathUI(type: JavaExec) {
+    main = 'ru.alfabank.epk.reactive.ui.xpath_comparator.UiMainOnlyXPath'
     classpath = sourceSets.main.runtimeClasspath
 }
 
