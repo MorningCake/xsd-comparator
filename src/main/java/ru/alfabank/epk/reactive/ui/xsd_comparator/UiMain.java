@@ -11,6 +11,8 @@ import java.io.File;
 
 public class UiMain extends JFrame {
 
+    private final TreeTableGenerator treeTableGenerator = new TreeTableGenerator();
+
     private JTextField inputText1;
     private JTextField inputText2;
     private JButton selectFileButton1;
@@ -112,11 +114,11 @@ public class UiMain extends JFrame {
         topSouthPanel.setPreferredSize(preferredSize3);
 
         // Левое дерево
-        JXTreeTable leftTreeTable = TreeTableGenerator.initGenerate("xsd1");
+        JXTreeTable leftTreeTable = treeTableGenerator.initGenerate("xsd1");
         topSouthPanel.add(new JScrollPane(leftTreeTable));
 
         // Правое дерево
-        JXTreeTable rightTreeTable = TreeTableGenerator.initGenerate("xsd2");
+        JXTreeTable rightTreeTable = treeTableGenerator.initGenerate("xsd2");
         topSouthPanel.add(new JScrollPane(rightTreeTable));
         southPanel.add(topSouthPanel, BorderLayout.NORTH);
 
@@ -160,7 +162,7 @@ public class UiMain extends JFrame {
 
         UiProcessor processor = new UiProcessor();
         try {
-            processor.process(text1, text2, selectedFile1, selectedFile2, downloadPanel, topSouthPanel);
+            processor.process(text1, text2, selectedFile1, selectedFile2, downloadPanel, topSouthPanel, treeTableGenerator);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Ошибка!", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(ex.getMessage());

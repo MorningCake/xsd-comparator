@@ -11,6 +11,8 @@ import java.io.File;
 
 public class UiMainOnlyXPath extends JFrame {
 
+    private final TreeTableGeneratorOnlyXPath treeTableGenerator = new TreeTableGeneratorOnlyXPath();
+
     private JTextField inputText1;
     private JTextField inputText2;
     private JButton selectFileButton1;
@@ -112,11 +114,11 @@ public class UiMainOnlyXPath extends JFrame {
         topSouthPanel.setPreferredSize(preferredSize3);
 
         // Левое дерево
-        JXTreeTable leftTreeTable = TreeTableGeneratorOnlyXPath.initGenerate("xsd");
+        JXTreeTable leftTreeTable = treeTableGenerator.initGenerate("xsd");
         topSouthPanel.add(new JScrollPane(leftTreeTable));
 
         // Правое дерево
-        JXTreeTable rightTreeTable = TreeTableGeneratorOnlyXPath.initGenerate("csv (xPath ini)");
+        JXTreeTable rightTreeTable = treeTableGenerator.initGenerate("csv (xPath ini)");
         topSouthPanel.add(new JScrollPane(rightTreeTable));
         southPanel.add(topSouthPanel, BorderLayout.NORTH);
 
@@ -160,7 +162,7 @@ public class UiMainOnlyXPath extends JFrame {
 
         UiProcessorOnlyXPath processor = new UiProcessorOnlyXPath();
         try {
-            processor.process(text1, text2, selectedFile1, selectedFile2, downloadPanel, topSouthPanel);
+            processor.process(text1, text2, selectedFile1, selectedFile2, downloadPanel, topSouthPanel, treeTableGenerator);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Ошибка!", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(ex.getMessage());

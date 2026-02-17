@@ -19,7 +19,7 @@ public class UiProcessorOnlyXPath {
 
     public void process(
             String parsingName1, String parsingName2, File xsdFile, File csvFile, JPanel downloadPanel,
-            JPanel treePanel
+            JPanel treePanel, TreeTableGeneratorOnlyXPath treeTableGenerator
     ) {
         if (Strings.isBlank(parsingName1) || Strings.isBlank(parsingName2) || xsdFile == null || csvFile == null)
             throw new RuntimeException("Не заполнены необходимые поля!");
@@ -47,14 +47,14 @@ public class UiProcessorOnlyXPath {
         Path compared = csvComparator.compare(path1, path2, true);
         // Создание ссылок для скачивания результатов
         createDownloadLinks(downloadPanel, path1.toString(), path2.toString(), compared.toString());
-        createTriesWithDiff(treePanel, path1, path2, compared);
+        createTriesWithDiff(treePanel, path1, path2, compared, treeTableGenerator);
     }
 
-    private void createTriesWithDiff(JPanel treePanel,
-                                     Path path1, Path path2, Path compared) {
+    private void createTriesWithDiff(JPanel treePanel, Path path1, Path path2, Path compared,
+                                     TreeTableGeneratorOnlyXPath treeTableGenerator) {
 
-        JXTreeTable leftTreeTable = TreeTableGeneratorOnlyXPath.generate(path1, compared, TreeTableGeneratorOnlyXPath.TreeType.LEFT);
-        JXTreeTable rightTreeTable = TreeTableGeneratorOnlyXPath.generate(path2, compared, TreeTableGeneratorOnlyXPath.TreeType.RIGHT);
+        JXTreeTable leftTreeTable = treeTableGenerator.generate(path1, compared, TreeTableGeneratorOnlyXPath.TreeType.LEFT);
+        JXTreeTable rightTreeTable = treeTableGenerator.generate(path2, compared, TreeTableGeneratorOnlyXPath.TreeType.RIGHT);
 
         treePanel.removeAll();
 
