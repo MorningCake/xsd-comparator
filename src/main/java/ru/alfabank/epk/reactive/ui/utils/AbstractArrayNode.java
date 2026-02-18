@@ -48,6 +48,10 @@ public abstract class AbstractArrayNode extends AbstractMutableTreeTableNode {
         return xPath[index];
     }
 
+    public String lastXPathElement() {
+        return xPath[xPathLength()-1];
+    }
+
     public String getXPathString() {
         return getValueAt(xpathColumn).toString();
     }

@@ -1,28 +1,26 @@
 package ru.alfabank.epk.reactive.ok.generator;
 
-import jakarta.annotation.Nullable;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.util.Strings;
 import ru.alfabank.epk.reactive.ui.utils.UiUtils;
-import ru.alfabank.epk.reactive.ui.xsd_comparator.ArrayNode;
-import ru.alfabank.epk.reactive.ui.xsd_comparator.TreeTableGenerator;
+import ru.alfabank.epk.reactive.ui.xpath_comparator.ArrayNodeOnlyXPath;
+import ru.alfabank.epk.reactive.ui.xpath_comparator.TreeTableGeneratorOnlyXPath;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
-public class XsdFromCsvGenerator {
+public class XsdFromCsvOnlyXPathGenerator {
 
     private static final String LINE_SEPARATOR = System.lineSeparator();
 
     public Path xsdGenerate(Path csvPath, String namespace, String xmlnsUrl, Map<String, String> importNamespacesAndUrls) {
-        TreeTableGenerator treeTableGenerator = new TreeTableGenerator();
+        TreeTableGeneratorOnlyXPath treeTableGenerator = new TreeTableGeneratorOnlyXPath();
         StringBuilder xsdBuilder = new StringBuilder();
 
-        List<ArrayNode> xsdRoots = treeTableGenerator.generateNodesTree(csvPath);
+        List<ArrayNodeOnlyXPath> xsdRoots = treeTableGenerator.generateNodesTree(csvPath);
 
         String xsdBegin = """
                 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -39,13 +37,13 @@ public class XsdFromCsvGenerator {
         }
         xsdBuilder.append(LINE_SEPARATOR);
 
-        for (ArrayNode xsdRoot : xsdRoots) {
+        for (ArrayNodeOnlyXPath xsdRoot : xsdRoots) {
             xsdBuilder.append("    ").append("<")
                     .append(namespace)
                     .append(":element name=\"")
-                    .append(xsdRoot.getValueAt(0))
+                    .append(generateNameAttr(xsdRoot))
                     .append("\" type=\"")
-                    .append(generateTypeAttr((String) xsdRoot.getValueAt(1)))
+                    .append(generateTypeAttr(xsdRoot))
                     .append("\"/>").append(LINE_SEPARATOR);
 
             generateComplexTypeXsd(namespace, xsdRoot, xsdBuilder);
@@ -59,29 +57,27 @@ public class XsdFromCsvGenerator {
         return UiUtils.exportResultToFile("xsd__" + fileName, "xsd", xsdBuilder.toString());
     }
 
-    private static void generateComplexTypeXsd(String namespace, ArrayNode parent, StringBuilder xsdBuilder) {
+    private static void generateComplexTypeXsd(String namespace, ArrayNodeOnlyXPath parent, StringBuilder xsdBuilder) {
         if (parent.getChildCount() > 0) {
-            List<ArrayNode> children = new ArrayList<>();
+            List<ArrayNodeOnlyXPath> children = new ArrayList<>();
             for (int i = 0; i < parent.getChildCount(); i++) {
-                children.add((ArrayNode) parent.getChildAt(i));
+                children.add((ArrayNodeOnlyXPath) parent.getChildAt(i));
             }
             xsdBuilder.append(LINE_SEPARATOR);
             String complexTypeBegin = """
                     <%s:complexType name="%s">
                         <%s:sequence>
-                """.formatted(namespace, parent.getValueAt(1), namespace);
+                """.formatted(namespace, generateTypeAttr(parent), namespace);
             xsdBuilder.append(complexTypeBegin);
 
-            for (ArrayNode child : children) {
+            for (ArrayNodeOnlyXPath child : children) {
 
                 String childXml = """
-                            <%s:element name="%s" type="%s"%s%s/>
+                            <%s:element name="%s" type="%s"/>
                 """.formatted(
                         namespace,
-                        child.getValueAt(0),
-                        generateTypeAttr((String) child.getValueAt(1)),
-                        generateOccursAttr((String) child.getValueAt(3), AttrType.MIN),
-                        generateOccursAttr((String) child.getValueAt(4), AttrType.MAX)
+                        generateNameAttr(child),
+                        generateTypeAttr(child)
                 );
                 xsdBuilder.append(childXml);
             }
@@ -92,29 +88,22 @@ public class XsdFromCsvGenerator {
                 """.formatted(namespace, namespace);
             xsdBuilder.append(complexTypeEnd);
 
-            for (ArrayNode child : children) {
+            for (ArrayNodeOnlyXPath child : children) {
                 generateComplexTypeXsd(namespace, child, xsdBuilder);
             }
         }
     }
 
-    private static String generateTypeAttr(@Nullable String type) {
-        return (Strings.isBlank(type)) ? "" : type;
+
+    private static String generateNameAttr(ArrayNodeOnlyXPath node) {
+        return node.lastXPathElement();
     }
 
-    private static String generateOccursAttr(@Nullable String occurs, AttrType type) {
-        return (Strings.isBlank(occurs) || occurs.equals("1"))
-                ? ""  // 1 - дефолтное значение, можно не указывать
-                : type.getPattern().formatted(occurs);
-    }
-
-    @RequiredArgsConstructor
-    private enum AttrType {
-        MIN(" minOccurs=\"%s\""),
-        MAX(" maxOccurs=\"%s\"");
-
-        @Getter
-        private final String pattern;
+    private static String generateTypeAttr(ArrayNodeOnlyXPath node) {
+        return node.getXPath().length == 1 ? node.getXPath()[0] :
+                Arrays.stream(node.getXPath()).map(str ->
+                    Character.toUpperCase(str.charAt(0)) + str.substring(1)
+                ).collect(Collectors.joining());
     }
 
 }
