@@ -19,6 +19,11 @@ task runXpathUI(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runXsdGenUI(type: JavaExec) {
+    main = 'ru.alfabank.epk.reactive.ui.xsd_generator.UiGenerator'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'

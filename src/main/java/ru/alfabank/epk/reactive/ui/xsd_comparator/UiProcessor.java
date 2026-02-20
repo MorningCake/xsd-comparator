@@ -4,6 +4,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.jdesktop.swingx.JXTreeTable;
 import ru.alfabank.epk.reactive.ok.SaxXsdReader;
 import ru.alfabank.epk.reactive.ok.XsdSchemaCsvComparator;
+import ru.alfabank.epk.reactive.ui.utils.UiUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,18 +25,8 @@ public class UiProcessor {
         if (Strings.isBlank(parsingName1) || Strings.isBlank(parsingName2) || xsdFile1 == null || xsdFile2 == null)
             throw new RuntimeException("Не заполнены необходимые поля!");
         // очистка папки generated
-        Path path = Path.of("src/main/resources/generated").toAbsolutePath();
-        try (Stream<Path> walk = Files.walk(path)) {
-            walk.filter(Files::isRegularFile).forEach(file -> {
-                try {
-                    Files.delete(file);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        } catch (IOException e) {
-            throw new RuntimeException("Ошибка при очистке temp директории (src/main/resources/generated)");
-        }
+        UiUtils.clearGeneratedFolder("src/main/resources/generated");
+
         // логика обработки данных
         SaxXsdReader saxReader = new SaxXsdReader();
         Path path1 = saxReader.readXsdByFilePath(xsdFile1,
@@ -89,23 +80,11 @@ public class UiProcessor {
             File destinationFile = chooser.getSelectedFile();
             try {
                 // Копируем файл из исходного расположения в указанное пользователем
-                copyFile(originalFilename, destinationFile);
+                UiUtils.copyFile(originalFilename, destinationFile);
                 JOptionPane.showMessageDialog(parent, "Файл успешно сохранён: " + destinationFile.getAbsolutePath());
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(parent, "Ошибка при сохранении файла: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
             }
-        }
-    }
-
-    // Вспомогательный метод для копирования файла
-    private void copyFile(String sourceFilename, File destinationFile) {
-        Path sourcePath = Paths.get(sourceFilename);
-        Path destPath = destinationFile.toPath();
-        try {
-            Files.copy(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new RuntimeException("Ошибка при копировании файла " + sourceFilename + " из temp " +
-                                       "(src/main/resources/generated) в директорию " + destinationFile.getName());
         }
     }
 }

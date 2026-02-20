@@ -1,10 +1,14 @@
-package ru.alfabank.epk.reactive.ui.xpath_comparator;
+package ru.alfabank.epk.reactive.ui.xsd_generator;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jdesktop.swingx.JXTreeTable;
 import ru.alfabank.epk.reactive.ok.SaxXsdReader;
 import ru.alfabank.epk.reactive.ok.XsdSchemaCsvComparator;
+import ru.alfabank.epk.reactive.ok.generator.XsdFromCsvGenerator;
+import ru.alfabank.epk.reactive.ok.generator.XsdFromCsvOnlyXPathGenerator;
+import ru.alfabank.epk.reactive.ok.generator.XsdGenerator;
 import ru.alfabank.epk.reactive.ui.utils.UiUtils;
+import ru.alfabank.epk.reactive.ui.xsd_comparator.TreeTableGenerator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,44 +18,43 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
 import java.util.stream.Stream;
 
-public class UiProcessorOnlyXPath {
+public class UiGenProcessor {
 
     public void process(
-            String parsingName1, String parsingName2, File xsdFile, File csvFile, JPanel downloadPanel,
-            JPanel treePanel, TreeTableGeneratorOnlyXPath treeTableGenerator
+            String parsingName, File csvFile, JPanel downloadPanel, JPanel treePanel,
+            TreeTableGenerator treeTableGenerator
     ) {
-        if (Strings.isBlank(parsingName1) || Strings.isBlank(parsingName2) || xsdFile == null || csvFile == null)
+        if (Strings.isBlank(parsingName) || csvFile == null)
             throw new RuntimeException("Не заполнены необходимые поля!");
         // очистка папки generated
         UiUtils.clearGeneratedFolder("src/main/resources/generated");
 
         // логика обработки данных
-        SaxXsdReader saxReader = new SaxXsdReader();
-        Path path1 = saxReader.readXsdByFilePath(xsdFile, false, true, false,
-                false, false, parsingName1, true);
+        // проверить формат csv, и исходя из формата создать обработчик
+        boolean isFullCsv;
+        try {
+            isFullCsv = Files.lines(csvFile.toPath()).anyMatch(line -> line.split(",").length == 5);
+        } catch (Exception ex) {
+            throw new RuntimeException("Файл csv не может быть прочитан!");
+        }
+        XsdGenerator xsdGenerator = isFullCsv ? new XsdFromCsvGenerator() : new XsdFromCsvOnlyXPathGenerator();
+        Path path = xsdGenerator.xsdGenerate(
+                csvFile.toPath(), "xsd",  "http://epk.subject.adapter.esb.alfa.ru/webservice",
+                Map.of("http://WSCommonTypes10.CS.ws.alfabank.ru","WSCommonTypes10.xsd")
+        );
 
-        Path path2 = csvFile.toPath();
-
-        XsdSchemaCsvComparator csvComparator = new XsdSchemaCsvComparator();
-        Path compared = csvComparator.compare(path1, path2, true);
         // Создание ссылок для скачивания результатов
-        createDownloadLinks(downloadPanel, path1.toString(), path2.toString(), compared.toString());
-        createTriesWithDiff(treePanel, path1, path2, compared, treeTableGenerator);
+        createDownloadLinks(downloadPanel, path.toString());
+        createTree(treePanel, csvFile.toPath(), treeTableGenerator);
     }
 
-    private void createTriesWithDiff(JPanel treePanel, Path path1, Path path2, Path compared,
-                                     TreeTableGeneratorOnlyXPath treeTableGenerator) {
-
-        JXTreeTable leftTreeTable = treeTableGenerator.generate(path1, compared, TreeTableGeneratorOnlyXPath.TreeType.LEFT);
-        JXTreeTable rightTreeTable = treeTableGenerator.generate(path2, compared, TreeTableGeneratorOnlyXPath.TreeType.RIGHT);
-
+    private void createTree(JPanel treePanel, Path path, TreeTableGenerator treeTableGenerator ) {
+        JXTreeTable leftTreeTable = treeTableGenerator.generateWithoutDiff(path);
         treePanel.removeAll();
-
         treePanel.add(new JScrollPane(leftTreeTable));
-        treePanel.add(new JScrollPane(rightTreeTable));
-
         treePanel.revalidate();
         treePanel.repaint();
     }
@@ -85,4 +88,5 @@ public class UiProcessorOnlyXPath {
             }
         }
     }
+
 }

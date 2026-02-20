@@ -14,14 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 
-public class XsdFromCsvGenerator {
+public class XsdFromCsvGenerator implements XsdGenerator {
 
     private static final String LINE_SEPARATOR = System.lineSeparator();
 
     public Path xsdGenerate(Path csvPath, String namespace, String xmlnsUrl, Map<String, String> importNamespacesAndUrls) {
         TreeTableGenerator treeTableGenerator = new TreeTableGenerator();
         StringBuilder xsdBuilder = new StringBuilder();
-
         List<ArrayNode> xsdRoots = treeTableGenerator.generateNodesTree(csvPath);
 
         String xsdBegin = """

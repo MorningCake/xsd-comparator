@@ -37,6 +37,7 @@
 /GetListRequest/data/subjectSets/subjectSet/contactKits/contactKit/contactPins/contactPin/sABS_Code
 /GetListRequest/data/subjectSets/subjectSet/contactKits/contactKit/contactPins/contactPin/sPin
 /GetListRequest/data/subjectSets/subjectSet/dealKits
+/GetListRequest/data/subjectSets/subjectSet/dealKits/dealKit
 /GetListRequest/data/subjectSets/subjectSet/dealKits/dealKit/deal
 /GetListRequest/data/subjectSets/subjectSet/dealKits/dealKit/subjectDeals
 /GetListRequest/data/subjectSets/subjectSet/dealKits/dealKit/pins
