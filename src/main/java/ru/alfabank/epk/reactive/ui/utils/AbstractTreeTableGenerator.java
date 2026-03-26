@@ -62,7 +62,7 @@ public abstract class AbstractTreeTableGenerator<T extends AbstractArrayNode, C 
         List<String> xsdCsv = UiUtils.readAllLines(xsdCsvPath);
 
         Map<String, List<T>> parentXPathsAndArrayNodesList = xsdCsv.stream()
-                .map(str -> (str + ", ").split(",")) // добавить 6ой элемент для заметок
+                .map(str -> (str + ", ").split(",")) // добавить 6ой (или 2ой) элемент для заметок
                 .map(arrayNodeFactory::create)
                 .collect(Collectors.groupingBy(T::getParentXPath, toList()));
 

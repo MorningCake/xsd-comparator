@@ -1,6 +1,7 @@
 package ru.alfabank.epk.reactive.ui.xsd_generator;
 
 import org.jdesktop.swingx.JXTreeTable;
+import ru.alfabank.epk.reactive.ui.xpath_comparator.TreeTableGeneratorOnlyXPath;
 import ru.alfabank.epk.reactive.ui.xsd_comparator.TreeTableGenerator;
 import ru.alfabank.epk.reactive.ui.xsd_comparator.UiProcessor;
 
@@ -14,6 +15,7 @@ import java.io.File;
 public class UiGenerator extends JFrame {
 
     private final TreeTableGenerator treeTableGenerator = new TreeTableGenerator();
+    private final TreeTableGeneratorOnlyXPath treeTableGeneratorOnlyXPath = new TreeTableGeneratorOnlyXPath();
 
     private JTextField inputText;
     private JButton selectFileButton;
@@ -146,7 +148,7 @@ public class UiGenerator extends JFrame {
         String text = inputText.getText();
         UiGenProcessor processor = new UiGenProcessor();
         try {
-            processor.process(text, selectedFile, downloadPanel, topSouthPanel, treeTableGenerator);
+            processor.process(text, selectedFile, downloadPanel, topSouthPanel, treeTableGenerator, treeTableGeneratorOnlyXPath);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Ошибка!", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(ex.getMessage());

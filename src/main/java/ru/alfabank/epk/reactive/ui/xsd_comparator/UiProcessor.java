@@ -9,12 +9,7 @@ import ru.alfabank.epk.reactive.ui.utils.UiUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.stream.Stream;
 
 public class UiProcessor {
 

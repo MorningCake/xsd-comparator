@@ -2,30 +2,28 @@ package ru.alfabank.epk.reactive.ui.xsd_generator;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jdesktop.swingx.JXTreeTable;
-import ru.alfabank.epk.reactive.ok.SaxXsdReader;
-import ru.alfabank.epk.reactive.ok.XsdSchemaCsvComparator;
 import ru.alfabank.epk.reactive.ok.generator.XsdFromCsvGenerator;
 import ru.alfabank.epk.reactive.ok.generator.XsdFromCsvOnlyXPathGenerator;
 import ru.alfabank.epk.reactive.ok.generator.XsdGenerator;
+import ru.alfabank.epk.reactive.ui.utils.AbstractTreeTableGenerator;
 import ru.alfabank.epk.reactive.ui.utils.UiUtils;
+import ru.alfabank.epk.reactive.ui.xpath_comparator.TreeTableGeneratorOnlyXPath;
 import ru.alfabank.epk.reactive.ui.xsd_comparator.TreeTableGenerator;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.stream.Stream;
 
+@SuppressWarnings("rawtypes")
 public class UiGenProcessor {
 
     public void process(
             String parsingName, File csvFile, JPanel downloadPanel, JPanel treePanel,
-            TreeTableGenerator treeTableGenerator
+            TreeTableGenerator treeTableGenerator, TreeTableGeneratorOnlyXPath treeTableGeneratorOnlyXPath
     ) {
         if (Strings.isBlank(parsingName) || csvFile == null)
             throw new RuntimeException("Не заполнены необходимые поля!");
@@ -35,8 +33,8 @@ public class UiGenProcessor {
         // логика обработки данных
         // проверить формат csv, и исходя из формата создать обработчик
         boolean isFullCsv;
-        try {
-            isFullCsv = Files.lines(csvFile.toPath()).anyMatch(line -> line.split(",").length == 5);
+        try (Stream<String> lines = Files.lines(csvFile.toPath())) {
+            isFullCsv = lines.anyMatch(line -> line.split(",").length == 5);
         } catch (Exception ex) {
             throw new RuntimeException("Файл csv не может быть прочитан!");
         }
@@ -48,10 +46,11 @@ public class UiGenProcessor {
 
         // Создание ссылок для скачивания результатов
         createDownloadLinks(downloadPanel, path.toString());
-        createTree(treePanel, csvFile.toPath(), treeTableGenerator);
+        AbstractTreeTableGenerator generator = isFullCsv ? treeTableGenerator : treeTableGeneratorOnlyXPath;
+        createTree(treePanel, csvFile.toPath(), generator);
     }
 
-    private void createTree(JPanel treePanel, Path path, TreeTableGenerator treeTableGenerator ) {
+        private <G extends AbstractTreeTableGenerator> void createTree(JPanel treePanel, Path path, G treeTableGenerator) {
         JXTreeTable leftTreeTable = treeTableGenerator.generateWithoutDiff(path);
         treePanel.removeAll();
         treePanel.add(new JScrollPane(leftTreeTable));
